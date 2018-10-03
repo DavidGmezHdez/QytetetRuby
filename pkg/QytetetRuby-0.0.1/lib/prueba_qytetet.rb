@@ -10,38 +10,33 @@ module ModeloQytetet
     
     def self.mayor_que_cero
       mayor_cero = Array.new
-#      mayor_cero << 3
-#      puts "entra"
-#      puts @@juego.mazo.inspect
       @@juego.mazo.each { |carta|
-#        puts carta.inspect
         if carta.valor > 0
           mayor_cero << carta
         end
       }
-#      puts mayor_cero.inspect
-      return mayor_cero.to_s
+      return mayor_cero
     end
     
-#    def self.tipo_casilla
-#      @tipo_casilla = Array.new
-#      @@juego.mazo.each do |carta|
-#        if @@juego.mazo.tipo == TipoSorpresa::IRACASILLA
-#          @tipo_casilla << carta
-#        end
-#      end
-#      return @tipo_casilla.to_s
-#    end
-#    
-#    def self.tipo_sorpresa(sorpresa)
-#      @tipo_sorpresa = Array.new
-#      @@juego.mazo.each do |carta|
-#        if @@juego.mazo.tipo == sorpresa
-#          @tipo_sorpresa << carta
-#        end
-#      end
-#      return @tipo_sorpresa.to_s
-#    end
+    def self.tipo_casilla
+     tipo_casilla = Array.new
+      @@juego.mazo.each do |carta|
+        if carta.tipo == TipoSorpresa::IRACASILLA
+          tipo_casilla << carta
+        end
+      end
+      return tipo_casilla
+    end
+    
+    def self.tipo_sorpresa(sorpresa)
+      tipo_sorpresa = Array.new
+      @@juego.mazo.each { |carta|
+        if carta.tipo == TipoSorpresa::const_get(sorpresa)
+          tipo_sorpresa << carta
+        end
+      }
+      return tipo_sorpresa
+    end
     
     def self.main
       @@juego.inicializar_cartas_sorpresa
@@ -49,13 +44,13 @@ module ModeloQytetet
       puts "Cartas con valor mayor a cero: "
       puts mayor_que_cero << "\n"
       
-#      puts "Cartas del tipo ir a casilla: "
-#      puts tipo_casilla << "\n"
+      puts "Cartas del tipo ir a casilla: "
+      puts tipo_casilla << "\n"
 #      
-#      TipoSorpresa::constants.each do |const_get|
-#        puts "Cartas del tipo #{const_get}: "
-#        puts tipo_sorpresa(const_get)
-#      end
+      TipoSorpresa::constants.each {|const_get|
+        puts "Cartas del tipo #{const_get}: "
+        puts tipo_sorpresa(const_get)
+      }
     end
   end
   

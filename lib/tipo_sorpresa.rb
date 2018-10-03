@@ -1,6 +1,4 @@
 # encoding: utf-8
-# author: Francisco Domínguez.
-
 module TipoSorpresa
     PAGARCOBRAR = :Pagar_cobrar
     IRACASILLA = :Ir_casilla

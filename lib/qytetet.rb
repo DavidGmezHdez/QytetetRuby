@@ -1,6 +1,4 @@
 # encoding: utf-8
-# author: Francisco Domínguez.
-
 require_relative "tipo_sorpresa"
 
 class Qytetet
