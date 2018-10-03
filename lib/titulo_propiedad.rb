@@ -1,15 +1,15 @@
 # encoding: utf-8
 class TituloPropiedad
-  def initialize(nombr,p_compra,a_base,f_revalorizacion,h_base,p_edificar,hipotec,num_hoteles,num_casas)
+  def initialize(nombr,p_compra,a_base,f_revalorizacion,h_base,p_edificar)
     @nombre = nombr
     @precio_compra = p_compra
     @alquiler_base = a_base
     @factor_revalorizacion = f_revalorizacion
     @hipoteca_base = h_base
     @precio_edificar = p_edificar
-    @hipotecada = hipotec
-    @numero_hoteles = num_hoteles
-    @numero_casas = num_casas
+    @hipotecada = false
+    @numero_hoteles = 0
+    @numero_casas = 0
   end
   
    attr_reader :nombre, :precio_compra, :alquiler_base, :factor_revalorizacion, :hipoteca_base, :precio_edificar, :hipotecada, :numero_hoteles, :numero_casas 

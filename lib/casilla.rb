@@ -37,8 +37,5 @@ class Casilla
     end
   
   end
-  
-  
-  
-  
+
 end

@@ -5,14 +5,20 @@ class Qytetet
   
   def initialize
     @mazo = Array.new
+    inicializar_tablero
   end
   
   attr_reader :mazo
   
+  def inicializar_tablero
+    @Tablero=Tablero.new
+       
+  end
+
   def inicializar_cartas_sorpresa
     @mazo = Array.new
     
-    @mazo << Sorpresa.new("Te han pillado saqueando las arcas públicas del estado, vas a la cárcel.", 9, TipoSorpresa::IRACASILLA)
+    @mazo << Sorpresa.new("Te han pillado saqueando las arcas públicas del estado, vas a la cárcel.", @Tablero.carcel.numero_casilla, TipoSorpresa::IRACASILLA)
     @mazo << Sorpresa.new("No sabemos si estabas cerca de la casilla inicial o no, pero ahora lo vas a estar.", 1, TipoSorpresa::IRACASILLA)
     @mazo << Sorpresa.new("¿Eres supersticioso?", 13, TipoSorpresa::IRACASILLA)
     @mazo << Sorpresa.new("Resulta que un funcionario de la cárcel es amigo tuyo. De casualidades está hecha la vida. Sales de la cárcel.", 0, TipoSorpresa::SALIRCARCEL)

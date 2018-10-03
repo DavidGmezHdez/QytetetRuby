@@ -1,6 +1,9 @@
 # encoding: utf-8
 require_relative "sorpresa"
 require_relative "qytetet"
+require_relative "tablero"
+require_relative "casilla"
+require_relative "titulo_propiedad"
 
 module ModeloQytetet
   class PruebaQytetet
@@ -38,6 +41,7 @@ module ModeloQytetet
     
     def self.main
       @@juego.inicializar_cartas_sorpresa
+      tablero=Tablero.new
       
       puts "Cartas con valor mayor a cero: "
       puts mayor_que_cero << "\n"
@@ -49,6 +53,8 @@ module ModeloQytetet
         puts "Cartas del tipo #{const_get}: "
         puts tipo_sorpresa(const_get)
       }
+      
+      puts tablero.to_s
     end
   end
   
