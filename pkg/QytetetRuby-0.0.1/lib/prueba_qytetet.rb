@@ -19,12 +19,12 @@ module ModeloQytetet
     end
     
     def self.tipo_casilla
-     tipo_casilla = Array.new
-      @@juego.mazo.each do |carta|
+      tipo_casilla = Array.new
+      @@juego.mazo.each { |carta|
         if carta.tipo == TipoSorpresa::IRACASILLA
           tipo_casilla << carta
         end
-      end
+      }
       return tipo_casilla
     end
     
@@ -46,8 +46,8 @@ module ModeloQytetet
       
       puts "Cartas del tipo ir a casilla: "
       puts tipo_casilla << "\n"
-#      
-      TipoSorpresa::constants.each {|const_get|
+      
+      TipoSorpresa::constants.each { |const_get|
         puts "Cartas del tipo #{const_get}: "
         puts tipo_sorpresa(const_get)
       }

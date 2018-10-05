@@ -1,9 +1,13 @@
 # encoding: utf-8
-require_relative "sorpresa"
-require_relative "qytetet"
-require_relative "tablero"
-require_relative "casilla"
-require_relative "titulo_propiedad"
+# author: Francisco Domínguez.
+
+require_relative 'tipo_sorpresa'
+require_relative 'sorpresa'
+require_relative 'tipo_casilla'
+require_relative 'titulo_propiedad'
+require_relative 'casilla'
+require_relative 'tablero'
+require_relative 'qytetet'
 
 module ModeloQytetet
   class PruebaQytetet
@@ -20,12 +24,12 @@ module ModeloQytetet
     end
     
     def self.tipo_casilla
-     tipo_casilla = Array.new
-      @@juego.mazo.each do |carta|
+      tipo_casilla = Array.new
+      @@juego.mazo.each { |carta|
         if carta.tipo == TipoSorpresa::IRACASILLA
           tipo_casilla << carta
         end
-      end
+      }
       return tipo_casilla
     end
     
@@ -41,15 +45,15 @@ module ModeloQytetet
     
     def self.main
       @@juego.inicializar_cartas_sorpresa
-      tablero=Tablero.new
+      tablero = Tablero.new
       
       puts "Cartas con valor mayor a cero: "
       puts mayor_que_cero << "\n"
       
       puts "Cartas del tipo ir a casilla: "
       puts tipo_casilla << "\n"
-#      
-      TipoSorpresa::constants.each {|const_get|
+      
+      TipoSorpresa::constants.each { |const_get|
         puts "Cartas del tipo #{const_get}: "
         puts tipo_sorpresa(const_get)
       }

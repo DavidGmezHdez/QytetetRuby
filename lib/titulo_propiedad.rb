@@ -1,23 +1,30 @@
 # encoding: utf-8
-class TituloPropiedad
-  def initialize(nombr,p_compra,a_base,f_revalorizacion,h_base,p_edificar)
-    @nombre = nombr
-    @precio_compra = p_compra
-    @alquiler_base = a_base
-    @factor_revalorizacion = f_revalorizacion
-    @hipoteca_base = h_base
-    @precio_edificar = p_edificar
-    @hipotecada = false
-    @numero_hoteles = 0
-    @numero_casas = 0
+# author: Francisco Domínguez.
+
+module ModeloQytetet
+  class TituloPropiedad
+    
+    def initialize(nombre, precioC, alquilerB, factorR, hipotecaB, precioE)
+      @nombre = nombre
+      @precioC = precioC
+      @alquilerB = alquilerB
+      @factorR = factorR
+      @hipotecaB = hipotecaB
+      @precioE = precioE
+      @hipotecada = false
+      @numHoteles = 0
+      @numCasas = 0
+    end
+    
+    attr_reader :nombre, :precioC, :alquilerB, :factorB,
+      :hipotecaB, :precioE, :numHoteles, :numCasas
+    
+    attr_accessor :hipotecada
+    
+    def to_s
+      "nombre: #{@nombre} \n precioCompra: #{@precioC} \n alquilerBase: #{@alquierB} \n
+      factorRevalorización: #{@factorR} \n hipotecaBase: #{@hipotecaB} \n precioEdificar: #{@precioE} \n
+      hipotecada: #{@hipotecada} \n numHoteles: #{@numHoteles} \n numCasas: #{@numCasas}"
+    end
   end
-  
-   attr_reader :nombre, :precio_compra, :alquiler_base, :factor_revalorizacion, :hipoteca_base, :precio_edificar, :hipotecada, :numero_hoteles, :numero_casas 
-  
-  def to_s
-    "Nombre: #{@nombre} \n Precio Compra: #{@precio_compra} \n Alquiler Base: #{@alquiler_base} \n Factor Revalorizacion: #{@factor_revalorizacion} 
-    \n Hipoteca Base: #{@hipoteca_base} \n Precio Edificar: #{@precio_edificar} \n Hipotecada: #{@hipotecada} \n Numero Hoteles: #{@numero_hoteles}
-    \n Numero Casas: #{@numero_casas}"
-  end
-  
 end

@@ -1,41 +1,35 @@
 # encoding: utf-8
+# author: Francisco Domínguez.
 
-class Casilla
-  def initialize(n_casilla,p_compra,tip,tit)
-   @numero_casilla=n_casilla
-   @precio_compra=p_compra
-   @tipo=tip
-   @titulo=tit
+module ModeloQytetet
+  class Casilla
     
-  end
-  def tipocalle(tip,n_casilla,tit)
-    @numero_casilla=n_casilla
-    if tip==tipo_casilla.Calle
-      @titulo=tit
-      @tipo=tip
-      @precio_compra=tit.precio_compra
+    def initialize(tipo, numCas, titulo)
+      @numCas = numCas
+      @tipo = tipo
+      
+      if titulo == nil
+        @precioCompra = 0
+      else
+        @precioCompra = titulo.precioC
+        @titulo = titulo
+      end
     end
-  end
-   
-  def notipocalle(tip,n_casilla)
-    @numero_casilla=n_casilla
-    if tip!=tipo_casilla.Calle
-      @titulo=tip
-      @precio_compra=0      
-    end
-  end
-  
-  attr_reader :numero_casilla, :precio_compra, :tipo, :titulo
-  
-  def to_s
     
-    if (@tipo==tipo_casilla.Calle)
-    "Numero Casilla: #{@numero_casilla} \n Precio Compra: #{@precio_compra} \n Tipo: #{@tipo} \n Titulo: #{@titulo}"
+    def self.new2(tipo, numCas)
+      self.new(tipo, numCas, nil)
     end
-    if (@tipo!=tipo_casilla.Calle)
-    "Numero Casilla: #{@numero_casilla} \n Precio Compra: #{@precio_compra} \n Tipo: #{@tipo}"
+    
+    attr_reader :numCas, :tipo, :precioCompra
+    attr_accessor :titulo
+    private :titulo=
+    
+    def to_s
+      if @tipo == TipoCasilla::CALLE
+        "Casilla: numeroCasilla: #{@numCas} \n precioCompra: #{@precioCompra} \n tipo: #{@tipo} \n titulo: #{@titulo}"
+      else
+        "Casilla: numeroCasilla: #{@numCas} \n precioCompra: #{@precioCompra} \n tipo: #{@tipo}"
+      end
     end
-  
   end
-
 end

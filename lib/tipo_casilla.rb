@@ -1,10 +1,14 @@
 # encoding: utf-8
-module TipoCasilla
-    SALIDA = :Salida
-    CALLE = :Calle
-    JUEZ = :Juez
-    CARCEL = :Carcel
-    SORPRESA = :Sorpresa
-    IMPUESTO =:Impuesto
-    PARKIN =:Parkin
+# author: Francisco Domínguez.
+
+module ModeloQytetet
+  module TipoCasilla
+      SALIDA = :Salida
+      CALLE = :Calle
+      SORPRESA = :Sorpresa
+      CARCEL = :Carcel
+      JUEZ = :Juez
+      IMPUESTO = :Impuesto
+      PARKING = :Parking
+  end
 end
