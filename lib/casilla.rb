@@ -1,5 +1,4 @@
 # encoding: utf-8
-# author: Francisco Domínguez.
 
 module ModeloQytetet
   class Casilla
@@ -22,7 +21,7 @@ module ModeloQytetet
     
     attr_reader :numCas, :tipo, :precioCompra
     attr_accessor :titulo
-    private :titulo=
+    private :titulo
     
     def to_s
       if @tipo == TipoCasilla::CALLE
@@ -31,5 +30,32 @@ module ModeloQytetet
         "Casilla: numeroCasilla: #{@numCas} \n precioCompra: #{@precioCompra} \n tipo: #{@tipo}"
       end
     end
+  
+    protected
+    def signar_propietario(jugador)
+    
+    
+    end
+    protected
+    def pagar_alquiler
+    
+    
+    end
+    protected
+    def propietario_encarcelado
+    
+    
+    end
+    protected
+    def soy_edificable
+    
+    
+    end
+    protected
+    def tengo_propietario
+    
+    
+    end
+    
   end
 end

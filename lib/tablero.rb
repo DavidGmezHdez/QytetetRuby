@@ -1,5 +1,4 @@
 # encoding: utf-8
-# author: Francisco Domínguez.
 
 module ModeloQytetet
   class Tablero
@@ -14,6 +13,7 @@ module ModeloQytetet
       "Tablero: \n Casillas: #{@casillas} \n Carcel: #{@carcel}"
     end
     
+    private
     def inicializar
       @casillas = Array.new
       titulos = Array.new
@@ -58,6 +58,28 @@ module ModeloQytetet
       
     end
     
-    private :inicializar
+    protected
+    def es_casilla_carcel(numero_casilla)
+    
+      
+    end
+    protected
+    def obtener_casilla_final(casilla,desplazamiento)
+    
+    
+    end
+    protected
+    def obtener_casilla_numero(numero_casilla = casilla_final)
+    
+    
+    
+    end
+
+    
+  
+  
+  
+  
+  
   end
 end

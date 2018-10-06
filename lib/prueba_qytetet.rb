@@ -1,5 +1,5 @@
 # encoding: utf-8
-# author: Francisco Domínguez.
+# author: David Gómez.
 
 require_relative 'tipo_sorpresa'
 require_relative 'sorpresa'
@@ -8,10 +8,12 @@ require_relative 'titulo_propiedad'
 require_relative 'casilla'
 require_relative 'tablero'
 require_relative 'qytetet'
+require_relative 'dado'
+require_relative 'jugador'
 
 module ModeloQytetet
   class PruebaQytetet
-    @@juego = Qytetet.new
+    @@juego = Qytetet.instance
     
     def self.mayor_que_cero
       mayor_cero = Array.new
@@ -43,6 +45,25 @@ module ModeloQytetet
       return tipo_sorpresa
     end
     
+    def self.get_nombre_jugadores
+      nombres=Array.new
+      s=0
+      
+      puts "Introduce el numero de jugadores: "
+      numero_jugadores=gets.chomp.to_s
+      
+      while i < numero_jugadores
+        puts "Introduce los nombres de los jugadores"
+        nombres[i] = gets
+        i+=1
+      end
+      
+      return nombres
+      
+    end
+    
+    
+    
     def self.main
       @@juego.inicializar_cartas_sorpresa
       tablero = Tablero.new
@@ -57,8 +78,15 @@ module ModeloQytetet
         puts "Cartas del tipo #{const_get}: "
         puts tipo_sorpresa(const_get)
       }
+      puts "Tablero"
+      puts tablero.to_s << "\n"
       
-      puts tablero.to_s
+      puts "Jugadores"
+      puts get_nombre_jugadores << "\n"
+      
+      puts "Qytetet"
+      puts Qytetet.instance
+      
     end
   end
   
