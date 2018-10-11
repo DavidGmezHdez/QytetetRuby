@@ -26,9 +26,10 @@ module ModeloQytetet
     def inicializar_tablero
       @tablero = Tablero.new
     end
-
+    protected
     attr_reader :mazo, :tablero,:jugador_actual,:jugadores,:dado
     attr_accessor :carta_actual
+    public :mazo,:jugadores
     
     public
     def inicializar_cartas_sorpresa

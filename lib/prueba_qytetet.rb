@@ -47,10 +47,10 @@ module ModeloQytetet
     
     def self.get_nombre_jugadores
       nombres=Array.new
-      s=0
+      i=0
       
       puts "Introduce el numero de jugadores: "
-      numero_jugadores=gets.chomp.to_s
+      numero_jugadores=gets.chomp.to_i
       
       while i < numero_jugadores
         puts "Introduce los nombres de los jugadores"
