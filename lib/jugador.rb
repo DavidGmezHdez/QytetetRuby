@@ -5,8 +5,8 @@ class Jugador
       @encarcelado = false
       @nombre = nombre
       @saldo = 7500
-      @cartaLibertad = nil
-      @casillaActual = nil
+      @carta_libertad = nil
+      @casilla_actual = nil
       @propiedades = nil
       
     end
@@ -15,6 +15,15 @@ class Jugador
     attr_accessor :encarcelado, :cartaLibertad, :casillaActual
 
   protected
+    def to_s
+      "Encarcelado: #{@encarcelado} \n Nombre: #{@nombre} \n Saldo: #{@saldo} \n 
+      Carta Libertad: #{@carta_libertad} \n Casilla Actual: #{@casilla_actual} \n Propiedades: #{@propiedades}"
+    end
+  
+  
+  
+  
+  
   def cancelar_hipoteca(titulo)
     
 
@@ -133,4 +142,6 @@ class Jugador
     
     
   end
+  
+
 end

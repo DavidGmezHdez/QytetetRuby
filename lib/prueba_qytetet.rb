@@ -65,8 +65,15 @@ module ModeloQytetet
     
     
     def self.main
-      @@juego.inicializar_cartas_sorpresa
+      nombres=Array.new
+      nombres << get_nombre_jugadores
+      @@juego.inicializar_juego(nombres)
       tablero = Tablero.new
+      
+      puts "Jugadores"
+      puts  @@juego.jugadores.to_s<< "\n"
+      
+      
       
       puts "Cartas con valor mayor a cero: "
       puts mayor_que_cero << "\n"
@@ -81,9 +88,7 @@ module ModeloQytetet
       puts "Tablero"
       puts tablero.to_s << "\n"
       
-      puts "Jugadores"
-      puts get_nombre_jugadores << "\n"
-      
+
       puts "Qytetet"
       puts Qytetet.instance
       

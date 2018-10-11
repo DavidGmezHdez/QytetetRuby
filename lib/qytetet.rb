@@ -13,7 +13,6 @@ module ModeloQytetet
     
     def initialize
       @mazo = Array.new
-      @tablero=Tablero.new
       @carta_actual
       @jugador_actual
       @jugadores=Array.new
@@ -22,16 +21,13 @@ module ModeloQytetet
       inicializar_tablero
     end
     
-    private
-    def inicializar_tablero
-      @tablero = Tablero.new
-    end
+
     protected
     attr_reader :mazo, :tablero,:jugador_actual,:jugadores,:dado
     attr_accessor :carta_actual
     public :mazo,:jugadores
     
-    public
+    private
     def inicializar_cartas_sorpresa
       @mazo = Array.new
 
@@ -113,24 +109,25 @@ module ModeloQytetet
     end  
 
     public
-    def inicializarJuego(nombres)
+    def inicializar_juego(nombres)
 
-    inicializar_tablero();
-    inicializar_cartas_sorpresa();
-    inicializar_jugadores(nombres);
+    inicializar_tablero
+    inicializar_cartas_sorpresa
+    inicializar_jugadores(nombres)
 
     end 
     
     private
     def inicializar_jugadores(nombres)
-    for i in nombres.lenght
-    nombres[i]=Jugador.new
-    
+    nombres.each{ |nombre|
+    @jugadores << Jugador.new(nombre)
+    }
     end
-    end
-
-
     public
+    def inicializar_tablero
+      @tablero = Tablero.new
+    end
+
     def intentar_salir_carcel(metodo)
 
     end
