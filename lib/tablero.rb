@@ -4,6 +4,7 @@ module ModeloQytetet
   class Tablero
     
     def initialize
+      @casillas = Array.new
       inicializar
     end
     
@@ -15,12 +16,11 @@ module ModeloQytetet
     
     private
     def inicializar
-      @casillas = Array.new
+
       titulos = Array.new
       contador = 0
-      
       # Creamos primero todos los titulos de propiedad
-      titulos << TituloPropiedad.new("Calle Willyrex", 625, 75, 12, 350, 400)
+     titulos << TituloPropiedad.new("Calle Willyrex", 625, 75, 12, 350, 400)
       titulos << TituloPropiedad.new("Calle Guerrero", 700, 50, 10, 550, 250)
       titulos << TituloPropiedad.new("Calle Cabronazi", 550, 80, 15, 600, 750)
       titulos << TituloPropiedad.new("Calle Giorgio", 890, 65, 13, 1000, 300)
@@ -34,27 +34,27 @@ module ModeloQytetet
       titulos << TituloPropiedad.new("Calle Ruby", 500, 95, 14, 175, 275)
       
       # Ahora creamos todas las casillas
-      @casillas << Casilla.new2(:SALIDA, 0)
-      @casillas << Casilla.new(:CALLE, 1, titulos[contador])
-      @casillas << Casilla.new2(:SORPRESA, 2)
-      @casillas << Casilla.new(:CALLE, 3, titulos[contador+1])
-      @casillas << Casilla.new2(:JUEZ, 4)
-      @casillas << Casilla.new(:CALLE, 5, titulos[contador+1])
-      @casillas << Casilla.new2(:PARKING, 6)
-      @casillas << Casilla.new(:CALLE, 7, titulos[contador+1])
-      @casillas << Casilla.new2(:SORPRESA, 8)
-      @casillas << Casilla.new(:CALLE, 9, titulos[contador+1])
-      @casillas << Casilla.new(:CALLE, 10, titulos[contador+1])
-      @casillas << Casilla.new(:CALLE, 11, titulos[contador+1])
-      @casillas << Casilla.new2(:IMPUESTO, 12)
-      @casillas << Casilla.new(:CALLE, 13, titulos[contador+1])
-      @casillas << Casilla.new2(:CARCEL, 14)
+      @casillas << Casilla.casilla(TipoCasilla::SALIDA, 0, 1000)
+      @casillas << Casilla.calle(1, titulos[contador])
+      @casillas << Casilla.casilla(TipoCasilla::SORPRESA, 2, 0)
+      @casillas << Casilla.calle(3, titulos[contador+=1])
+      @casillas << Casilla.casilla(TipoCasilla::JUEZ, 4, 0)
+      @casillas << Casilla.calle( 5, titulos[contador+=1])
+      @casillas << Casilla.casilla(TipoCasilla::PARKING, 6, 0)
+      @casillas << Casilla.calle(7, titulos[contador+=1])
+      @casillas << Casilla.casilla(TipoCasilla::SORPRESA, 8, 0)
+      @casillas << Casilla.calle(9, titulos[contador+=1])
+      @casillas << Casilla.calle(10, titulos[contador+=1])
+      @casillas << Casilla.calle(11, titulos[contador+=1])
+      @casillas << Casilla.casilla(TipoCasilla::IMPUESTO, 12, 0)
+      @casillas << Casilla.calle(13, titulos[contador+=1])
+      @casillas << Casilla.casilla(TipoCasilla::CARCEL, 14, 0)
       @carcel = @casillas[14]
-      @casillas << Casilla.new(:CALLE, 15, titulos[contador+1])
-      @casillas << Casilla.new2(:SORPRESA, 16)
-      @casillas << Casilla.new(:CALLE, 17, titulos[contador+1])
-      @casillas << Casilla.new(:CALLE, 18, titulos[contador+1])
-      @casillas << Casilla.new(:CALLE, 19, titulos[contador+1])
+      @casillas << Casilla.calle(15, titulos[contador+=1])
+      @casillas << Casilla.casilla(TipoCasilla::SORPRESA, 16, 0)
+      @casillas << Casilla.calle(17, titulos[contador+=1])
+      @casillas << Casilla.calle(18, titulos[contador+=1])
+      @casillas << Casilla.calle(19, titulos[contador+=1])
       
     end
     

@@ -16,8 +16,8 @@ class Jugador
 
   protected
     def to_s
-      "Encarcelado: #{@encarcelado} \n Nombre: #{@nombre} \n Saldo: #{@saldo} \n 
-      Carta Libertad: #{@carta_libertad} \n Casilla Actual: #{@casilla_actual} \n Propiedades: #{@propiedades}"
+            "Jugador: #{@nombre} \n encarcelado: #{@encarcelado} \n 
+      propiedades: #{@propiedades} \n saldo: #{@saldo} \n casillaActual: #{@casillaActual}"
     end
   
   

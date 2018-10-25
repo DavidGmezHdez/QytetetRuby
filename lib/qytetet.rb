@@ -29,8 +29,6 @@ module ModeloQytetet
     
     private
     def inicializar_cartas_sorpresa
-      @mazo = Array.new
-
       @mazo << Sorpresa.new("Te han pillado saqueando las arcas públicas del estado, vas a la cárcel.", @tablero.carcel.numCas, TipoSorpresa::IRACASILLA)
       @mazo << Sorpresa.new("No sabemos si estabas cerca de la casilla inicial o no, pero ahora lo vas a estar.", 1, TipoSorpresa::IRACASILLA)
       @mazo << Sorpresa.new("¿Eres supersticioso?", 13, TipoSorpresa::IRACASILLA)

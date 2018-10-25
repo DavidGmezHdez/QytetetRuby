@@ -3,20 +3,19 @@
 module ModeloQytetet
   class Casilla
     
-    def initialize(tipo, numCas, titulo)
-      @numCas = numCas
+    def initialize(tipo, numCas, titulo, coste)
+      @numeroCasilla = numCas
       @tipo = tipo
-      
-      if titulo == nil
-        @precioCompra = 0
-      else
-        @precioCompra = titulo.precioC
-        @titulo = titulo
-      end
+      @titulo = titulo
+      @coste = coste
     end
     
-    def self.new2(tipo, numCas)
-      self.new(tipo, numCas, nil)
+    def self.calle(numCas, titulo)
+      new(TipoCasilla::CALLE, numCas, titulo, titulo.precioC)
+    end
+    
+    def self.casilla(tipo, numCas, coste)
+      new(tipo, numCas, nil, coste)
     end
     
     attr_reader :numCas, :tipo, :precioCompra

@@ -18,7 +18,7 @@ module ModeloQytetet
     def self.mayor_que_cero
       mayor_cero = Array.new
       @@juego.mazo.each { |carta|
-        if carta.valor > 0
+        if carta.valor != 0
           mayor_cero << carta
         end
       }
@@ -65,8 +65,7 @@ module ModeloQytetet
     
     
     def self.main
-      nombres=Array.new
-      nombres << get_nombre_jugadores
+      nombres = get_nombre_jugadores
       @@juego.inicializar_juego(nombres)
       tablero = Tablero.new
       
