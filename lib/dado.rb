@@ -12,8 +12,9 @@ class Dado
   
   protected
   def tirar
-    
-    
+    r = rand(1..6)
+    @valor=r
+    return r
   end
   
 end

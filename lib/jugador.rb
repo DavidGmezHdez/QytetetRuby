@@ -16,8 +16,9 @@ class Jugador
 
   protected
     def to_s
+        capital=obtener_capital
             "Jugador: #{@nombre} \n encarcelado: #{@encarcelado} \n 
-      propiedades: #{@propiedades} \n saldo: #{@saldo} \n casillaActual: #{@casillaActual}"
+      propiedades: #{@propiedades} \n saldo: #{@saldo} \n capital: #{capital} \n casillaActual: #{@casillaActual}"
     end
   
   
@@ -25,51 +26,102 @@ class Jugador
   
   
   def cancelar_hipoteca(titulo)
-    
-
+    puede_cancelar=false
+    coste_cancelar=titulo.cancelar_coste_cancelar
+    if @saldo>coste_cancelar
+      titulo.cancelar_hipoteca
+      puede_cancelar=true
+    end
+    return puede_cancelar
   end
   
  
   def comprar_titulo_propiedad
-
+      coste_compra = @casillaActual.coste
+      comprado = false
+      
+      if coste_compra < @saldo
+        titulo = @casillaActual.asignar_propietario(@jugadorActual)
+        @propiedades.push(titulo)
+        modificar_saldo(-coste_compra)
+        comprado = true
+      end
+    return comprado
   end
-    
 
   def cuantas_casas_hoteles_tengo
-
+    contador=0
+    for i in @propiedades.size
+      contador=contador + @propiedades[i].numCasas + @propiedades[i].numHoteles
+    end
+    return contador
   end  
   
 
   def debo_pagar_alquiler
-
-
+    es_de_mi_propiedad=es_de_mi_propiedad(@casilla_actual.titulo)
+    tiene_propietario=!es_de_mi_propiedad && @casilla_actual.tengo_propietario
+    encarcelado=!es_de_mi_propiedad && tiene_propietario && @casilla_actual.propietario_encarcelado
+    esta_hipotecada=!es_de_mi_propiedad && tiene_propietario && @casilla_actual.titulo.hipotecada
+    debo_pagar=!es_de_mi_propiedad && tiene_propietario && !encarcelado && !esta_hipotecada
+    return debo_pagar
   end
 
   def devolver_carta_libertad
-
-    
+    inter=Sorpresa.new(@carta_libertad.texto,@carta_libertad.tipo,@carta_libertad.sorpresa)
+    @carta_libertad=nil
+    return inter
   end
   
 
   def edificar_casa(titulo)
-
+    hay_espacio=titulo.numCasas<4
+    tengo_saldo=false
+    coste_edificar_casa=0
+    if hay_espacio
+      coste_edificar_casa=titulo.precioE
+      tengo_saldo=tengo_saldo(coste_edificar_casa)
+    end
+    if hay_espacio && tengo_saldo
+        @casilla_actual.titulo.edificar_casa
+        modificar_saldo(-coste_edificar_casa)
+    end
+    edificada=hay_espacio && tengo_saldo
+    return edificada
   end
   
 
   def edificar_hotel(titulo)
-
+    hay_espacio=titulo.numHoteles<4
+    tengo_saldo=false
+    coste_edificar_hotel=0
+    if hay_espacio && 
+      coste_edificar_hotel=titulo.precioE
+      tengo_saldo=tengo_saldo(coste_edificar_hotel)
+    end
+    if hay_espacio && tengo_saldo
+        @casilla_actual.titulo.edificar_hotel
+        modificar_saldo(-coste_edificar_hotel)
+    end
+    edificada=hay_espacio && tengo_saldo
+    return edificada
   end
 
 
   def eliminar_de_mis_propiedades(titulo)
-
-    
+    @propiedades.delete(titulo)
+    titulo.propietario=nil
   end
 
   private
   def es_de_mi_propiedad(titulo)
-
-
+    esta=false
+    for i in @propiedades.size
+      if @propiedades[i]==titulo
+        esta=true
+      end
+    end
+    return esta
   end
 
   protected
@@ -80,67 +132,105 @@ class Jugador
 
 
   def hipotecar_propiedad(titulo)
-
+    coste=titulo.hipotecar
+    modificar_saldo(coste)
   end
   
 
   def ir_a_carcel(casilla)
-    
-    
+    if casilla.tipo == TipoCasilla::CARCEL
+      @casilla_actual=casilla
+    end
   end
 
 
   def modificar_saldo(cantidad)
-    
-    
+    if(cantidad>0)
+      @saldo=@saldo+cantidad
+    end
+    if(cantidad<0)
+      @saldo=@saldo-cantidad
+    end
+    return @saldo
   end
 
 
   def obtener_capital
-    
-    
+    resultado=@saldo
+    for i in @propidades.size
+      resultado=resultado + @propiedades[i].precioC + (@propiedades[i].precioE*@propiedades[i].numHoteles) 
+      + (@propiedades[i].precioE + @propiedades[i].numCasas)
+      if @propiedades[i].hipotecada
+        resultado=resultado - @propiedades[i].hipotecaB
+      end
+    end
+    return resultado
   end
 
 
   def obtener_propiedades(hipotecada)
-    
-    
+    propieadeshipo=Array.new
+    for i in @propiedades.size
+      if @propiedades[i].hipotecada==hipotecada
+        propieadeshipo << @propiedades[i]
+      end
+    end
+    return propieadeshipo
   end
 
  
   def pagar_alquiler
-    
-    
+    coste_alquiler=@casilla_actual.titulo.calcular_importe_alquiler
+    @casilla_actual.titulo.propietario.modificar_saldo(coste_alquiler)
+    modificar_saldo(-coste_alquiler)
   end
   
 
   def pagar_impuesto
-    
-    
+    @saldo=@saldo-@casilla_actual.coste
   end
 
  
   def pagar_libertad(cantidad)
-    
+
     
   end
   
 
   def tengo_carta_libertad
-    
-    
+    return @carta_libertad!=nil
   end
   
   private
   def tengo_saldo(cantidad)
-    
-    
+    resultado=false
+    if @saldo>cantidad
+      resultado=true
+    end
+    return resultado
   end
   
   protected
   def vender_propiedad(casilla)
+    titulo=casilla.titulo
+    eliminar_de_mis_propiedades(titulo)
+    precio_venta=titulo.calcular_precio_venta
+    modificar_saldo(precio_venta)
+  end
+  
+  def <=>(otroJugador)
+    otroCapital= otroJugador.obtenerCapital
+    miCapital=obtenerCapital
     
+    if (otroCapital>miCapital)
+      return 1 
+    end
+   
+    if (otroCapital<miCapital)
+      return -1 
+    end
     
+    return 0
   end
   
 

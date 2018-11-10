@@ -7,7 +7,7 @@ module ModeloQytetet
       @numeroCasilla = numCas
       @tipo = tipo
       @titulo = titulo
-      @coste = coste
+      @precioCompra = coste
     end
     
     def self.calle(numCas, titulo)
@@ -31,29 +31,31 @@ module ModeloQytetet
     end
   
     protected
-    def signar_propietario(jugador)
-    
-    
+    def asignar_propietario(jugador)
+      if !@titulo.tengo_propietario
+        @titulo.propietario=jugador
+      end
+      return @titulo
     end
     protected
     def pagar_alquiler
-    
-    
+      return @titulo.debo_pagar_alquiler
     end
     protected
     def propietario_encarcelado
-    
-    
+      return @titulo.propietario_encarcelado
     end
     protected
     def soy_edificable
-    
-    
+      resultado=false
+      if @tipo == TipoCasilla::CALLE
+        resultado=true
+      end
+      return resultado
     end
     protected
     def tengo_propietario
-    
-    
+      return @titutlo.tengo_propietario
     end
     
   end
