@@ -17,7 +17,7 @@ module ModeloQytetet
       @jugador_actual
       @jugadores=Array.new
       @dado=Dado.instance
-      @estado=nil
+      @estado
       inicializar_tablero
     end
     
@@ -42,23 +42,29 @@ module ModeloQytetet
     end
     protected
     def actuar_si_en_casilla_edificable
-      debo_pagar= @jugador_actual.debo_pagar_alquiler
-      casilla=@jugador_actual.casillaActual
-      tengo_propietario=casilla.tengo_propietario
+     debo_pagar = @jugadorActual.debo_pagar_alquiler
+      puts debo_pagar
       
-      if(debo_pagar)
-        @jugador_actual.pagar_alquiler
-        if @jugador_actual.saldo<0
-          @estado=EstadoJuego::ALGUNJUGADORENBANCARROTA
+      if debo_pagar
+        @jugadorActual.pagar_alquiler
+        
+        if @jugadorActual.saldo <= 0
+          @estado = EstadoJuego::ALGUNJUGADORENBANCARROTA
         end
       end
-      if @estado!=EstadoJuego::ALGUNJUGADORENBANCARROTA
+      
+      casilla = obtener_casilla_jugador_actual
+      tengo_propietario = casilla.tengo_propietario
+      
+      if @estado != EstadoJuego::ALGUNJUGADORENBANCARROTA
         if tengo_propietario
-          @estado=EstadoJuego::JA_PUEDEGESTIONAR
+          @estado = EstadoJuego::JA_PUEDEGESTIONAR
+          
+        else
+           @estado = EstadoJuego::JA_PUEDECOMPRAROGESTIONAR
         end
-      else
-        @estado=EstadoJuego::JA_PUEDECOMPRAROGESTIONAR
       end
+
     end   
     protected
     def actuar_si_en_casilla_no_edificable
@@ -71,7 +77,8 @@ module ModeloQytetet
           encarcelar_jugador
         else
           if casilla.tipo==TipoCasilla::SORPRESA
-            mazo.delete(@carta_actual) { |unusedlocal2|  }
+            @carta_actual=mazo[0]
+            mazo.delete(0) { |unusedlocal2|  }
             @estado=EstadoJuego::JA_CONSORPRESA
           end
         end
@@ -145,6 +152,15 @@ module ModeloQytetet
 
     def comprar_titulo_propiedad
       comprado=@jugador_actual.comprar_titulo_propiedad
+      coste_compra=@jugador_actual.casillaActual.coste
+      if coste_compra<@jugador_actual.saldo
+        titulo=@jugador_actual.casillaActual.titulo
+        titulo.propietario=@jugador_actual
+        @jugador_actual.casillaActual.asignar_propietario(@jugador_actual)
+        @jugador_actual.propiedades << titulo
+        @jugador_actual.modificar_saldo(-coste_compra)
+        comprado=true
+      end
       if comprado
         @estado=EstadoJuego::JA_PUEDEGESTIONAR
       end
@@ -178,24 +194,14 @@ module ModeloQytetet
     end
 
     def edificar_hotel(numero_casilla)
+      edificada=false
       casilla=@tablero.obtener_casilla_numero(numero_casilla)
-      titulo=casilla.titulo
-      edificada=@jugador_actual.edificar_hotel(titulo)
-      num_hoteles=titulo.numHoteles
-      
-      
-      if num_hoteles<4
-        coste_edificar_hotel=titulo.precioE
-        tengo_saldo=@jugador_actual.tengo_saldo(coste_edificar_hotel)
-      end
-      if tengo_saldo
-        titulo.edificar_hotel
-        num_hoteles=num_hoteles+1
-        @jugador_actual.modificar_saldo(-coste_edificar_hotel)
-        edificada=true
-      end
-      if edificada
-        @estado=EstadoJuego::JA_PUEDEGESTIONAR
+      if casilla.tipo==TipoCasilla::CALLE && casilla.titulo.numCasas==4
+        titulo=casilla.titulo
+        edificada=@jugador_actual.edificar_hotel(titulo)
+        if edificada
+          @estado=EstadoJuego::JA_PUEDEGESTIONAR
+        end
       end
       return edificada
     end
@@ -283,18 +289,21 @@ module ModeloQytetet
       mover(casilla)
     end
     
-    protected
+    
     def mover(num_casilla_destino)
-      casilla_inicial=@jugador_actual.casillaActual
-      casilla_final=tablero.obtener_casilla_final(casilla_inicial,num_casilla_destino)
-      if num_casilla_destino<casilla_inicial.numeroCasilla
-        @jugador_actual.modificar_saldo(@@saldo_salida)
+      casilla_inicial = @jugadorActual.casillaActual
+      casilla_final = @tablero.obtener_casilla_numero(num_casilla_destino)
+      @jugadorActual.casillaActual = casilla_final
+      
+      if num_casilla_destino < casilla_inicial.numCas
+        @jugadorActual.modificar_saldo(@@SALDO_SALIDA)
       end
+      
       if casilla_final.soy_edificable
         actuar_si_en_casilla_edificable
       else
         actuar_si_en_casilla_no_edificable
-      end
+end
     end
 
     public
@@ -340,21 +349,23 @@ module ModeloQytetet
 
     private
     def salida_jugadores
-      for i in @jugadores.size
-        @jugadores[i].casillaActual=0
+      r=Random.new()
+      for i in @jugadores
+        i.casillaActual = @tablero.obtener_casilla_numero(0)
       end
+      indice = r.rand(@jugadores.size)
+      @jugadorActual = @jugadores[indice]
+      @estado=EstadoJuego::JA_PREPARADO
     end
     private
     def set_carta_actual(carta_actual)
-
-    
+      @carta_actual=carta_actual
     end
-
     
     public
     def siguiente_jugador
       numero = @jugadores.index(@jugador_actual) { |item|  }
-      @jugador_actual=@jugadores[(numero+1)%4]
+      @jugador_actual=@jugadores[(numero)%4]
       if (@jugador_actual.encarcelado)
         @estado=EstadoJuego::JA_ENCARCELADOCONOPCIONDELIBERTAD
       else

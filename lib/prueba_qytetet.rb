@@ -10,6 +10,8 @@ require_relative 'tablero'
 require_relative 'qytetet'
 require_relative 'dado'
 require_relative 'jugador'
+require_relative 'estado_juego'
+require_relative 'metodo_salir_carcel'
 
 module ModeloQytetet
   class PruebaQytetet
@@ -69,27 +71,77 @@ module ModeloQytetet
       @@juego.inicializar_juego(nombres)
       tablero = Tablero.new
       
-      puts "Jugadores"
-      puts  @@juego.jugadores.to_s<< "\n"
+#      puts "Jugadores"
+#      puts  @@juego.jugadores.to_s<< "\n"
+#
+#      puts "Cartas con valor mayor a cero: "
+#      puts mayor_que_cero << "\n"
+#      
+#      puts "Cartas del tipo ir a casilla: "
+#      puts tipo_casilla << "\n"
+#      
+#      TipoSorpresa::constants.each { |const_get|
+#        puts "Cartas del tipo #{const_get}: "
+#        puts tipo_sorpresa(const_get)
+#      }
+#      puts "Tablero"
+#      puts tablero.to_s << "\n"
+#      
+#
+#      puts "Qytetet"
+#      puts Qytetet.instance
+     
+      # Probamos el método mover, comprar, diferentes casillas...
+      @@juego.mover(3)
+      puts @@juego.jugadorActual.casillaActual.numeroCasilla
+      @@juego.mover(13)
+      puts @@juego.jugadorActual.casillaActual.numeroCasilla
+      @@juego.jugadorActual.comprar_titulo_propiedad
+      puts @@juego.jugadores
+      @@juego.jugadorActual.casillaActual.asignar_propietario(@@juego.jugadorActual)
+      @@juego.siguiente_jugador
+      @@juego.mover(13)
+      puts @@juego.jugadorActual.saldo
       
+      # Probamos a caer en una sorpresa y a aplicar sorpresa después
+      #@@juego.mover(2)
+      #puts @@juego.mazo[0]
+      #@@juego.aplicar_sorpresa
+      #puts @@juego.jugadorActual.casillaActual
       
+      # Probamos a hipotecar, cancelar hipoteca, vender, edificar casas y hoteles...
+      #@@juego.mover(9)
+      #@@juego.hipotecar_propiedad(@@juego.jugadorActual.casillaActual.numeroCasilla)
+      #@@juego.cancelar_hipoteca(@@juego.jugadorActual.casillaActual.numeroCasilla)
+      #@@juego.vender_propiedad(@@juego.jugadorActual.casillaActual.numeroCasilla)
+      #@@juego.edificar_casa(@@juego.jugadorActual.casillaActual.numeroCasilla)
+      #@@juego.edificar_hotel(@@juego.jugadorActual.casillaActual.numeroCasilla)
       
-      puts "Cartas con valor mayor a cero: "
-      puts mayor_que_cero << "\n"
-      
-      puts "Cartas del tipo ir a casilla: "
-      puts tipo_casilla << "\n"
-      
-      TipoSorpresa::constants.each { |const_get|
-        puts "Cartas del tipo #{const_get}: "
-        puts tipo_sorpresa(const_get)
-      }
-      puts "Tablero"
-      puts tablero.to_s << "\n"
-      
+      # Probamos a salir de la carcel
+#      @@juego.jugadorActual.ir_a_carcel(tablero.carcel)
+#      if(@@juego.jugadorActual.tengo_carta_libertad)
+#        @@juego.intentar_salir_carcel(MetodoSalirCarcel::PAGANDOLIBERTAD)
+#      else
+#        consigue = @@juego.intentar_salir_carcel(MetodoSalirCarcel::TIRANDODADO)
+#        
+#        if consigue
+#          puts "Sales de la cárcel"
+#        else
+#          puts "Al palo"
+#        end
+#      end
 
-      puts "Qytetet"
-      puts Qytetet.instance
+#      puts @@juego.jugadorActual
+#      @@juego.mover(13)
+#      @@juego.comprar_titulo_propiedad
+#      puts @@juego.jugadorActual.casillaActual.titulo.propietario
+#      @@juego.siguiente_jugador
+#      @@juego.mover(13)
+#      puts @@juego.jugadorActual.casillaActual.titulo.alquilerBase
+#      puts @@juego.jugadorActual
+      
+      
+      
       
     end
   end
