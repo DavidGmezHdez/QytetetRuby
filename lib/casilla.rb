@@ -18,8 +18,8 @@ module ModeloQytetet
       new(tipo, numCas, nil, coste)
     end
     
-    attr_reader :numCas, :tipo, :precioCompra
-    attr_accessor :titulo
+    attr_reader  :tipo, :precioCompra
+    attr_accessor :titulo, :numCas
 
     
     def to_s
@@ -53,7 +53,7 @@ module ModeloQytetet
     end
 
     def tengo_propietario
-      return @titutlo.tengo_propietario
+      return @titulo.tengo_propietario
     end
     
   end

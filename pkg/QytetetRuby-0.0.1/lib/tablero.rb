@@ -58,17 +58,17 @@ module ModeloQytetet
       
     end
     
-    protected
+    public
     def es_casilla_carcel(numero_casilla)
       return @carcel==numero_casilla
       
     end
-    public
+    
     def obtener_casilla_final(casilla,desplazamiento)
       return @casillas[casilla+desplazamiento]%20
     
     end
-    public
+    
     def obtener_casilla_numero(numero_casilla)
       return @casillas[numero_casilla]
     end

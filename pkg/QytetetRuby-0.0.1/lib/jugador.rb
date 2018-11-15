@@ -20,10 +20,10 @@ class Jugador
             "Jugador: #{@nombre} \n encarcelado: #{@encarcelado} \n 
       propiedades: #{@propiedades} \n saldo: #{@saldo} \n capital: #{capital} \n casillaActual: #{@casillaActual}"
     end
-  
+public
   def cancelar_hipoteca(titulo)
     puede_cancelar=false
-    coste_cancelar=titulo.cancelar_coste_cancelar
+    coste_cancelar=titulo.calcular_coste_cancelar
     if @saldo>coste_cancelar
       titulo.cancelar_hipoteca
       puede_cancelar=true
@@ -33,7 +33,7 @@ class Jugador
   
  
   def comprar_titulo_propiedad
-      coste_compra = @casillaActual.coste
+      coste_compra = @casillaActual.precioCompra
       comprado = false
       
       if coste_compra < @saldo
@@ -53,7 +53,7 @@ class Jugador
     return contador
   end  
   
-public
+
   def debo_pagar_alquiler
     titulo = @casillaActual.titulo
     esdemipropiedad = es_de_mi_propiedad(titulo)
@@ -114,13 +114,13 @@ public
     return edificada
   end
 
-  private
+
   def eliminar_de_mis_propiedades(titulo)
     @propiedades.delete(titulo)
     titulo.propietario=nil
   end
 
-  private
+ 
   def es_de_mi_propiedad(titulo)
     tiene = false
       
@@ -163,11 +163,11 @@ public
 
   def obtener_capital
     resultado=@saldo
-    for i in @propidades.size
-      resultado=resultado + @propiedades[i].precioC + (@propiedades[i].precioE*@propiedades[i].numHoteles) 
-      + (@propiedades[i].precioE + @propiedades[i].numCasas)
-      if @propiedades[i].hipotecada
-        resultado=resultado - @propiedades[i].hipotecaB
+    for i in @propiedades
+      resultado=resultado + i.precioC + (i.precioE*i.numHoteles) 
+      + (i.precioE + i.numCasas)
+      if i.hipotecada
+        resultado=resultado - i.hipotecaB
       end
     end
     return resultado
@@ -176,9 +176,9 @@ public
 
   def obtener_propiedades(hipotecada)
     propieadeshipo=Array.new
-    for i in @propiedades.size
-      if @propiedades[i].hipotecada==hipotecada
-        propieadeshipo << @propiedades[i]
+    for i in @propiedades
+      if i.hipotecada==hipotecada
+        propieadeshipo << i
       end
     end
     return propieadeshipo
@@ -198,8 +198,12 @@ public
 
  
   def pagar_libertad(cantidad)
-
+    tengo_saldo=tengo_saldo(cantidad)
     
+    if tengo_saldo
+      @encarcelado=false
+      modificar_saldo(-cantidad)
+    end
   end
   
 
@@ -207,7 +211,7 @@ public
     return @carta_libertad!=nil
   end
   
-  private
+  
   def tengo_saldo(cantidad)
     resultado=false
     if @saldo>cantidad
@@ -238,5 +242,6 @@ public
     
     return 0
   end
+  private :es_de_mi_propiedad, :eliminar_de_mis_propiedades
  end
 end

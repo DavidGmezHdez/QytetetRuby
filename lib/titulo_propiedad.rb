@@ -22,7 +22,7 @@ module ModeloQytetet
     attr_accessor :hipotecada,:propietario
     
     def to_s
-      "nombre: #{@nombre} \n precioCompra: #{@precioC} \n alquilerBase: #{@alquierB} \n
+      "nombre: #{@nombre} \n precioCompra: #{@precioC} \n alquilerB: #{@alquierB} \n
       factorRevalorización: #{@factorR} \n hipotecaBase: #{@hipotecaB} \n precioEdificar: #{@precioE} \n
       hipotecada: #{@hipotecada} \n numHoteles: #{@numHoteles} \n numCasas: #{@numCasas}"
     end
@@ -57,11 +57,6 @@ module ModeloQytetet
     def cancelar_hipoteca
       @hipotecada=false
       return true
-    end
-    
-    def cobrar_alquiler(coste)
-      
-      
     end
     
     def edificar_casa

@@ -10,7 +10,6 @@ class Dado
   
   attr_reader :valor
   
-  protected
   def tirar
     r = rand(1..6)
     @valor=r
