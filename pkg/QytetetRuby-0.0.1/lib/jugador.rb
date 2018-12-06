@@ -8,8 +8,26 @@ class Jugador
       @cartaLibertad = nil
       @casillaActual=0
       @propiedades = Array.new
-      
-    end
+  end
+  
+  
+  
+  def self.nuevo (nombre)
+    new(nombre)
+  end
+
+  
+  def self.copia(jugador)
+    @encarcelado = jugador.encarcelado
+    @nombre = jugador.nombre
+    @saldo=jugador.saldo
+    @cartaLibertad=jugador.cartaLibertad
+    @casillaActual=jugador.casillaActual
+    @propiedades=jugador.propiedades
+    
+  end
+  
+  
     
     attr_reader :nombre, :saldo
     attr_accessor :encarcelado, :cartaLibertad, :casillaActual, :propiedades
@@ -242,6 +260,17 @@ public
     
     return 0
   end
+  
+  def debo_ir_a_carcel()
+    return !@cartaLibertad
+  end
+  
+  def convertime(fianza)
+    especulador=especulador(fianza,self)
+    return especulador
+  end
+  
+  
   private :es_de_mi_propiedad, :eliminar_de_mis_propiedades
  end
 end

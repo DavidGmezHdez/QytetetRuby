@@ -31,8 +31,10 @@ module ModeloQytetet
       @mazo << Sorpresa.new("No sabemos si estabas cerca de la casilla inicial o no, pero ahora lo vas a estar.", 1, TipoSorpresa::IRACASILLA)
       @mazo << Sorpresa.new("¿Eres supersticioso?", 13, TipoSorpresa::IRACASILLA)
       @mazo << Sorpresa.new("Resulta que un funcionario de la cárcel es amigo tuyo. De casualidades está hecha la vida. Sales de la cárcel.", 0, TipoSorpresa::SALIRCARCEL)
+      @mazo << Sorpresa.new("¡Te conviertes en especulador!", 3000, TipoSorpresa::CONVERTIRME)
       @mazo << Sorpresa.new("Tus rivales te odian tanto que les obligamos a que te den lo que lleven suelto en la cartera.", 200, TipoSorpresa::PORJUGADOR)
       @mazo << Sorpresa.new("Parece que te está gustando el juego, por eso tendrás que recompensar a tus rivales.", -300, TipoSorpresa::PORJUGADOR)
+      @mazo << Sorpresa.new("¡Te conviertes en especulador!", 5000, TipoSorpresa::CONVERTIRME)
       @mazo << Sorpresa.new("¡Enhorabuena! Te ha tocado la lotería, pero la agencia tributaria se va a quedar casi todo.", 250, TipoSorpresa::PAGARCOBRAR)
       @mazo << Sorpresa.new("Vamos a jugar a algo, tú me das algo de dinero y yo no te doy nada. ¿Qué te parece?", -250, TipoSorpresa::PAGARCOBRAR)
       @mazo << Sorpresa.new("Vaya, esta sorpresa parece que te va a quitar algo de dinero por los hoteles y casas de tus rivales, siempre y cuando tú estés de acuerdo... o no.", -150, TipoSorpresa::PORCASAHOTEL)
@@ -114,6 +116,8 @@ module ModeloQytetet
           if @jugador_actual.saldo < 0
             @estado=EstadoJuego::ALGUNJUGADORENBANCARROTA
           end
+        when TiporSorpresa::CONVERTIRME
+          @jugador_actual=@jugador_actual.convertime(@carta_actual.valor)
         when TipoSorpresa::PORJUGADOR
           for i in @@MAX_JUGADORES-1
             jugador = siguiente_jugador
@@ -244,7 +248,7 @@ module ModeloQytetet
     private
     def inicializar_jugadores(nombres)
     nombres.each{ |nombre|
-    @jugadores << Jugador.new(nombre)
+    @jugadores << Jugador.nuevo(nombre)
     }
     end
     public
