@@ -61,5 +61,10 @@ class Especulador < Jugador
     
     return edificada
   end
+  def to_s
+    "Jugador: #{super.to_s} \n fianza: #{@fianza}"
+    
+  end
+  
 end
 end

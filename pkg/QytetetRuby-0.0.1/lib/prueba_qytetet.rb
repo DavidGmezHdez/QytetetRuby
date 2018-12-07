@@ -90,33 +90,33 @@ module ModeloQytetet
 
       puts "Qytetet"
       puts Qytetet.instance
-     
-      # Probamos el método mover, comprar, diferentes casillas...
-      @@juego.mover(3)
-      puts @@juego.jugador_actual.casillaActual.numCas
-      @@juego.mover(13)
-      puts @@juego.jugador_actual.casillaActual.numCas
-      @@juego.jugador_actual.comprar_titulo_propiedad
-      puts @@juego.jugadores
-      @@juego.jugador_actual.casillaActual.asignar_propietario(@@juego.jugador_actual)
-      @@juego.siguiente_jugador
-      @@juego.mover(13)
-      puts @@juego.jugador_actual.saldo
-      
-      # Probamos a caer en una sorpresa y a aplicar sorpresa después
-      @@juego.mover(2)
-      puts @@juego.mazo[0]
-      @@juego.aplicar_sorpresa
-      puts @@juego.jugador_actual.casillaActual
-      
-      # Probamos a hipotecar, cancelar hipoteca, vender, edificar casas y hoteles...
-      @@juego.mover(9)
-      @@juego.hipotecar_propiedad(@@juego.jugador_actual.casillaActual.numCas)
-      @@juego.cancelar_hipoteca(@@juego.jugador_actual.casillaActual.numCas)
-      @@juego.vender_propiedad(@@juego.jugador_actual.casillaActual.numCas)
-      @@juego.edificar_casa(@@juego.jugador_actual.casillaActual.numCas)
-      @@juego.edificar_hotel(@@juego.jugador_actual.casillaActual.numCas)
-      
+#     
+#      # Probamos el método mover, comprar, diferentes casillas...
+#      @@juego.mover(3)
+#      puts @@juego.jugador_actual.casillaActual.numCas
+#      @@juego.mover(13)
+#      puts @@juego.jugador_actual.casillaActual.numCas
+#      @@juego.jugador_actual.comprar_titulo_propiedad
+#      puts @@juego.jugadores
+#      @@juego.jugador_actual.casillaActual.asignar_propietario(@@juego.jugador_actual)
+#      @@juego.siguiente_jugador
+#      @@juego.mover(13)
+#      puts @@juego.jugador_actual.saldo
+#      
+#      # Probamos a caer en una sorpresa y a aplicar sorpresa después
+#      @@juego.mover(2)
+#      puts @@juego.mazo[0]
+#      @@juego.aplicar_sorpresa
+#      puts @@juego.jugador_actual.casillaActual
+#      
+#      # Probamos a hipotecar, cancelar hipoteca, vender, edificar casas y hoteles...
+#      @@juego.mover(9)
+#      @@juego.hipotecar_propiedad(@@juego.jugador_actual.casillaActual.numCas)
+#      @@juego.cancelar_hipoteca(@@juego.jugador_actual.casillaActual.numCas)
+#      @@juego.vender_propiedad(@@juego.jugador_actual.casillaActual.numCas)
+#      @@juego.edificar_casa(@@juego.jugador_actual.casillaActual.numCas)
+#      @@juego.edificar_hotel(@@juego.jugador_actual.casillaActual.numCas)
+#      
 #       Probamos a salir de la carcel
       @@juego.jugador_actual.ir_a_carcel(tablero.carcel)
       if(@@juego.jugador_actual.tengo_carta_libertad)

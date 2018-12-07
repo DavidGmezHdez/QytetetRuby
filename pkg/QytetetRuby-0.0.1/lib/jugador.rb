@@ -101,33 +101,25 @@ public
   
 
   def edificar_casa(titulo)
-    hay_espacio=titulo.numCasas<4
-    tengo_saldo=false
-    coste_edificar_casa=0
-    if hay_espacio
-      coste_edificar_casa=titulo.precioE
-      tengo_saldo=tengo_saldo(coste_edificar_casa)
+    coste_edificar_casa=titulo.precioE
+    edificada=false
+    
+    if puedo_edificar_casa(titulo)
+      titulo.edificar_casa
+      modificar_saldo(-coste_edificar_casa)
+      edificada=true
     end
-    if hay_espacio && tengo_saldo
-        @casillaActual.titulo.edificar_casa
-        modificar_saldo(-coste_edificar_casa)
-    end
-    edificada=hay_espacio && tengo_saldo
     return edificada
   end
   
 
   def edificar_hotel(titulo)
+    coste_edificar_hotel=titulo.precioE
     edificada=false
-    num_hoteles=titulo.numHoteles
-    if num_hoteles<4
-      coste_edificar_hotel=titulo.precioE
-      tengo_saldo=tengo_saldo(coste_edificar_hotel)
-      if tengo_saldo
-        @casillaActual.titulo.edificar_hotel
-        modificar_saldo(-coste_edificar_hotel)
-        edificada=true
-      end
+    if puedo_edificar_hotel(titulo)
+      titulo.edificar_hotel
+      modificar_saldo(-coste_edificar_hotel)
+      edificada=true
     end
     return edificada
   end
@@ -268,6 +260,37 @@ public
   def convertime(fianza)
     especulador=especulador(fianza,self)
     return especulador
+  end
+  
+  def puedo_edificar_casa(titulo)
+    hay_espacio=titulo.numCasas<4
+    tengo_saldo=false
+    coste_edificar_casa=0
+    if hay_espacio
+      coste_edificar_casa=titulo.precioE
+      tengo_saldo=tengo_saldo(coste_edificar_casa)
+    end
+    if hay_espacio && tengo_saldo
+        @casillaActual.titulo.edificar_casa
+        modificar_saldo(-coste_edificar_casa)
+    end
+    edificada=hay_espacio && tengo_saldo
+    return edificada
+  end
+  
+  def puedo_edificar_hotel(titulo)
+    edificada=false
+    num_hoteles=titulo.numHoteles
+    if num_hoteles<4
+      coste_edificar_hotel=titulo.precioE
+      tengo_saldo=tengo_saldo(coste_edificar_hotel)
+      if tengo_saldo
+        @casillaActual.titulo.edificar_hotel
+        modificar_saldo(-coste_edificar_hotel)
+        edificada=true
+      end
+    end
+    return edificada
   end
   
   

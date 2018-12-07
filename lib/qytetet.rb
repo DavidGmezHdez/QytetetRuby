@@ -211,7 +211,7 @@ module ModeloQytetet
     def encarcelar_jugador
       casilla_carcel=nil
       carta=nil
-      if !@jugador_actual.tengo_carta_libertad
+      if @jugador_actual.debo_ir_a_carcel
         casilla_carcel=@tablero.carcel
         @jugador_actual.ir_a_carcel(casilla_carcel)
         @jugador_actual.casillaActual=casilla_carcel
