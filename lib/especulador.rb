@@ -1,70 +1,63 @@
-# encoding: utf-8
 module ModeloQytetet
-class Especulador < Jugador
-  
-  def self.especulador(fianza,otroJugador)
-    @fianza=fianza
-    super.copia(otroJugador)
-  end
-  
-  def pagar_impuesto
-    super.modificar_saldo(super.casillaActual.precioCompra / 2)
-  end
-  
-  def convertirme (fianza)
-    return self
-  end
-  
-  def debo_ir_a_carcel
-    return super.debo_ir_a_carcel && !pagar_fianza
-  end
-  
-  def pagar_fianza
-    return super.saldo > @fianza
-  end
-  
-  def puedo_edificar_casa(titulo)
-    hay_espacio=titulo.numCas>4
-    tengo_saldo=false
-    coste_edificar_casa=0
-    
-    if hay_espacio
-      coste_edificar_casa=titulo.coste_edificar
-      tengo_saldo=super.tengo_saldo(coste_edificar_casa)
+  class Especulador < Jugador
+    def self.copia(unJugador, fianza)
+      @fianza = fianza
+      super(unJugador)
     end
     
-    if hay_espacio && tengo_saldo
-      titulo.edificar_casa
-      super.modificar_saldo(-coste_edificar_casa)
+    protected
+    def pagar_impuesto
+      self.saldo = super/2;
     end
     
-    edificada=hay_espacio && tengo_saldo
-    
-    return edificada
-  end
-
-  def puedo_edificar_hotel(titulo)
-    hay_espacio=titulo.numHoteles>4
-    tengo_saldo=false
-    coste_edificar_hotel=0
-    
-    if hay_espacio
-      coste_edificar_hotel=titulo.coste_edificar_hotel
-      tengo_saldo=super.tengo_saldo(coste_edificar_hotel)
+    def convertirme
+      return self
     end
     
-    if hay_espacio && tengo_saldo
-      titulo.edificar_hotel
-      super.modificar_saldo(-coste_edificar_hotel)
+    def debo_ir_a_carcel
+      resultado = false
+      
+      if super && !pagar_fianza
+        resultado = true
+      end
+      
+      return resultado
     end
-    edificada=hay_espacio && tengo_saldo
     
-    return edificada
-  end
-  def to_s
-    "Jugador: #{super.to_s} \n fianza: #{@fianza}"
+    private
+    def pagar_fianza
+      puede_pagar = false
+      
+      if self.saldo > self.fianza
+        self.saldo = saldo-fianza
+        puede_pagar = true
+      end
+      
+      return puede_pagar
+    end
     
+    protected
+    def puedo_edificar_casa(titulo)
+      hay_espacio = titulo.numCasas < 8
+      tengo_saldo = false
+      
+      if hay_espacio
+        coste_edificar = titulo.precioEdificar
+        tengo_saldo = super.tengo_saldo(coste_edificar)
+      end
+      
+      return hay_espacio && tengo_saldo
+    end
+    
+    def puedo_edificar_hotel(titulo)
+      num_hoteles = titulo.numHoteles
+      tengo_saldo = super.tengo_saldo(titulo.precioEdificar)
+      
+      return num_hoteles < 8 && tengo_saldo
+    end
+    
+    def to_s
+      return super + " Especulador: #{@fianza}"
+    end
   end
-  
-end
 end
