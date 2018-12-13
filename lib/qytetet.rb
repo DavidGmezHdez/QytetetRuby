@@ -1,6 +1,19 @@
 # encoding: utf-8
 
 require "singleton"
+require_relative 'tipo_sorpresa'
+require_relative 'sorpresa'
+require_relative 'tipo_casilla'
+require_relative 'titulo_propiedad'
+require_relative 'casilla'
+require_relative 'tablero'
+require_relative 'qytetet'
+require_relative 'dado'
+require_relative 'jugador'
+require_relative 'estado_juego'
+require_relative 'metodo_salir_carcel'
+
+
 
 module ModeloQytetet
   class Qytetet
@@ -27,7 +40,7 @@ module ModeloQytetet
     
     private
     def inicializar_cartas_sorpresa
-      @mazo << Sorpresa.new("Te han pillado saqueando las arcas públicas del estado, vas a la cárcel.", @tablero.carcel.numCas, TipoSorpresa::IRACASILLA)
+      @mazo << Sorpresa.new("Te han pillado saqueando las arcas públicas del estado, vas a la cárcel.", @tablero.carcel.numCasilla, TipoSorpresa::IRACASILLA)
       @mazo << Sorpresa.new("No sabemos si estabas cerca de la casilla inicial o no, pero ahora lo vas a estar.", 1, TipoSorpresa::IRACASILLA)
       @mazo << Sorpresa.new("¿Eres supersticioso?", 13, TipoSorpresa::IRACASILLA)
       @mazo << Sorpresa.new("Resulta que un funcionario de la cárcel es amigo tuyo. De casualidades está hecha la vida. Sales de la cárcel.", 0, TipoSorpresa::SALIRCARCEL)
@@ -152,15 +165,6 @@ module ModeloQytetet
 
     def comprar_titulo_propiedad
       comprado=@jugador_actual.comprar_titulo_propiedad
-      coste_compra=@jugador_actual.casillaActual.precioCompra
-      if coste_compra<@jugador_actual.saldo
-        titulo=@jugador_actual.casillaActual.titulo
-        titulo.propietario=@jugador_actual
-        @jugador_actual.casillaActual.asignar_propietario(@jugador_actual)
-        @jugador_actual.propiedades << titulo
-        @jugador_actual.modificar_saldo(-coste_compra)
-        comprado=true
-      end
       if comprado
         @estado=EstadoJuego::JA_PUEDEGESTIONAR
       end
@@ -209,18 +213,14 @@ module ModeloQytetet
 
     private
     def encarcelar_jugador
-      casilla_carcel=nil
-      carta=nil
-      if @jugador_actual.debo_ir_a_carcel
+      if !@jugador_actual.debo_ir_a_carcel
         casilla_carcel=@tablero.carcel
         @jugador_actual.ir_a_carcel(casilla_carcel)
-        @jugador_actual.casillaActual=casilla_carcel
-        @jugador_actual.encarcelado=true
-        @estado=EstadoJuego::JA_ENCARCELADO
+        @estado = EstadoJuego::JA_ENCARCELADO
       else
-        carta=@jugador_actual.devolver_carta_actual
-        @mazo.push(carta)
-        @estado=EstadoJuego::JA_PUEDEGESTIONAR
+        carta=@jugador_actual.devolver_carta_libertad
+        @mazo << carta
+          @estado = EstadoJuego::JA_PUEDEGESTIONAR
       end
     end
 
@@ -286,7 +286,7 @@ module ModeloQytetet
     def jugar()
       tirar_dado
       casilla=@tablero.obtener_casilla_final(@jugador_actual.casillaActual,@dado.valor)
-      mover(casilla)
+      mover(casilla.numCasilla)
     end
     
     
@@ -295,7 +295,7 @@ module ModeloQytetet
       casilla_final = @tablero.obtener_casilla_numero(num_casilla_destino)
       @jugador_actual.casillaActual = casilla_final
       
-      if num_casilla_destino < casilla_inicial.numCas
+      if num_casilla_destino < 0
         @jugador_actual.modificar_saldo(@@saldo_salida)
       end
       
@@ -319,7 +319,7 @@ end
       casillas=Array.new
       nombre=nil
       for i in @jugador_actual.propiedades
-        nombre=@jugador_actual[i].nombre
+        nombre=i.nombre
         casillas << @tablero.casillas.index(nombre) { |item| }
       end
       return casillas
@@ -365,9 +365,11 @@ end
     public
     def siguiente_jugador
       numero = @jugadores.index(@jugador_actual) { |item|  }
-      @jugador_actual=@jugadores[(numero)%4]
+      @jugador_actual=@jugadores[(numero+1)%@jugadores.size]
       if (@jugador_actual.encarcelado)
         @estado=EstadoJuego::JA_ENCARCELADOCONOPCIONDELIBERTAD
+        intentar_salir_carcel(MetodoSalirCarcel::TIRANDODADO)
+        intentar_salir_carcel(MetodoSalirCarcel::PAGANDOLIBERTAD)
       else
         @estado=EstadoJuego::JA_PREPARADO
       end

@@ -1,8 +1,8 @@
 module ModeloQytetet
   class Especulador < Jugador
     def self.copia(unJugador, fianza)
-      @fianza = fianza
       super(unJugador)
+      @fianza = fianza
     end
     
     protected

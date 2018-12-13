@@ -1,5 +1,5 @@
-# encoding: utf-8
-# author: David Gómez.
+## encoding: utf-8
+## author: David Gómez.
 #
 #require_relative 'tipo_sorpresa'
 #require_relative 'sorpresa'
@@ -93,9 +93,9 @@
 #     
 #      # Probamos el método mover, comprar, diferentes casillas...
 #      @@juego.mover(3)
-#      puts @@juego.jugador_actual.casillaActual.numCas
+#      puts @@juego.jugador_actual.casillaActual.numCasilla
 #      @@juego.mover(13)
-#      puts @@juego.jugador_actual.casillaActual.numCas
+#      puts @@juego.jugador_actual.casillaActual.numCasilla
 #      @@juego.jugador_actual.comprar_titulo_propiedad
 #      puts @@juego.jugadores
 #      @@juego.jugador_actual.casillaActual.asignar_propietario(@@juego.jugador_actual)
@@ -111,11 +111,11 @@
 #      
 #      # Probamos a hipotecar, cancelar hipoteca, vender, edificar casas y hoteles...
 #      @@juego.mover(9)
-#      @@juego.hipotecar_propiedad(@@juego.jugador_actual.casillaActual.numCas)
-#      @@juego.cancelar_hipoteca(@@juego.jugador_actual.casillaActual.numCas)
-#      @@juego.vender_propiedad(@@juego.jugador_actual.casillaActual.numCas)
-#      @@juego.edificar_casa(@@juego.jugador_actual.casillaActual.numCas)
-#      @@juego.edificar_hotel(@@juego.jugador_actual.casillaActual.numCas)
+#      @@juego.hipotecar_propiedad(@@juego.jugador_actual.casillaActual.numCasilla)
+#      @@juego.cancelar_hipoteca(@@juego.jugador_actual.casillaActual.numCasilla)
+#      @@juego.vender_propiedad(@@juego.jugador_actual.casillaActual.numCasilla)
+#      @@juego.edificar_casa(@@juego.jugador_actual.casillaActual.numCasilla)
+#      @@juego.edificar_hotel(@@juego.jugador_actual.casillaActual.numCasilla)
 #      
 ##       Probamos a salir de la carcel
 #      @@juego.jugador_actual.ir_a_carcel(tablero.carcel)

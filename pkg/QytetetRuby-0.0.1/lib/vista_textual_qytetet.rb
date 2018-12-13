@@ -1,10 +1,11 @@
 # encoding: utf-8
-
-require_relative 'controlador_qytetet'
+require_relative "controlador_qytetet"
 module VistaTextualQytetet
   class Vista_textual_qytetet
-    @@controlador=ControladorQytetet.instance
+#    extend ControladorQytetet
+    @@controlador=ControladorQytetet::ControladorQytetet.instance
     public
+    
     def obtener_nombre_jugadores
       nombres=Array.new
       i=0
@@ -13,59 +14,71 @@ module VistaTextualQytetet
       numero_jugadores=gets.chomp.to_i
       
       while i < numero_jugadores
-        puts "Introduce los nombres de los jugadores"
+       puts "Introduce los nombres de los jugadores"
         nombres[i] = gets
         i+=1
       end
-      
+     
       return nombres
       
     end
     def elegir_casilla(opcion_menu)
       casillas=Array.new
+      auxiliar = Array.new
       casillas=@@controlador.obtener_casillas_validas(opcion_menu)
-      if casillas.null
+      if casillas.size == 0
         return -1
       else
-        puts casillas
-        return leer_valor_correcto(casillas)
+        puts "Casillas validas: "
+        for i in casillas.each
+          puts i.to_s
+          auxiliar << i
+        end
+        return leer_valor_correcto(auxiliar,false).to_i
       end
       
       
     end
-    def leer_valor_correcto(valores_correctos)
+    def leer_valor_correcto(valores_correctos,opcion)
       pertenece=false
       
       puts "Introduce una de las siguientes opciones: "
-      for i in valores_correctos.size
-        puts valores_correctos.get(i) 
-      end
       
+      if opcion
+        for i in valores_correctos.each
+#          puts i.to_s + " - " + ControladorQytetet::OpcionMenu[i].to_s
+            puts i
+        end
+      else
+        for i in valores_correctos.each
+          puts "Casilla: " + i.to_s
+        end
+      end
       introducido=gets.chomp.to_i
       
-      for i in valores_correctos.size
-        if introducido.to_i == valores_correctos.get(i).to_i
+      for i in valores_correctos.each
+        if introducido.to_i == i.to_i
           pertenece = true
-          valor_correcto = valores_correctos.get(i)
+          valor_correcto = i
           break
         end
       end
       
       if !pertenece
         valor_correcto="El valor introducido no coincide con el de las opciones"
-      end
+     end
       
       return valor_correcto
-      
+     
     end
     def elegir_operacion()
       lista=Array.new
       lista=@@controlador.obtener_operaciones_juego_validas
-      return leer_valor_correcto(lista)
+      return leer_valor_correcto(lista,true)
     end
     
     def self.main
-      ui = VistaTextualQytetet.new
+      ui = Vista_textual_qytetet.new
       @@controlador.nombre_jugadores = ui.obtener_nombre_jugadores
       operacion_elegida=0
       casilla_elegida=0
@@ -74,7 +87,7 @@ module VistaTextualQytetet
         operacion_elegida=ui.elegir_operacion
         necesita_elegir_casilla=@@controlador.necesita_elegir_casilla(operacion_elegida)
         if necesita_elegir_casilla
-          casilla_elegida=ui.elegir_casilla
+          casilla_elegida=ui.elegir_casilla(operacion_elegida)
         end
         if !necesita_elegir_casilla || casilla_elegida>0
           puts @@controlador.realizar_operacion(operacion_elegida, casilla_elegida)
@@ -83,5 +96,5 @@ module VistaTextualQytetet
       end
     end
   end
-  VistaTextualQytetet.main
+  Vista_textual_qytetet.main
 end

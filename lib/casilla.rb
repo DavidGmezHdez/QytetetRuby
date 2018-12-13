@@ -3,7 +3,7 @@
 module ModeloQytetet
   class Casilla
     
-    def initialize(tipo, numCas, coste)
+    def initialize(numCas, tipo, coste)
       @numCasilla = numCas
       @tipo = tipo
       @coste = coste

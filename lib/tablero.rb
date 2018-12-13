@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+require_relative "calle"
 module ModeloQytetet
   class Tablero
     
@@ -34,24 +35,24 @@ module ModeloQytetet
       titulos << TituloPropiedad.new("Calle Ruby", 500, 95, 14, 175, 275)
       
       # Ahora creamos todas las casillas
-      @casillas << Casilla.new(TipoCasilla::SALIDA, 0, 1000)
+      @casillas << Casilla.new(0,TipoCasilla::SALIDA, 1000)
       @casillas << Calle.new(1, titulos[contador])
-      @casillas << Casilla.new(TipoCasilla::SORPRESA, 2, 0)
+      @casillas << Casilla.new(2,TipoCasilla::SORPRESA, 0)
       @casillas << Calle.new(3, titulos[contador+=1])
-      @casillas << Casilla.new(TipoCasilla::JUEZ, 4, 0)
+      @casillas << Casilla.new(4,TipoCasilla::JUEZ, 0)
       @casillas << Calle.new( 5, titulos[contador+=1])
-      @casillas << Casilla.new(TipoCasilla::PARKING, 6, 0)
+      @casillas << Casilla.new(6,TipoCasilla::PARKING, 0)
       @casillas << Calle.new(7, titulos[contador+=1])
-      @casillas << Casilla.new(TipoCasilla::SORPRESA, 8, 0)
+      @casillas << Casilla.new(8,TipoCasilla::SORPRESA, 0)
       @casillas << Calle.new(9, titulos[contador+=1])
       @casillas << Calle.new(10, titulos[contador+=1])
       @casillas << Calle.new(11, titulos[contador+=1])
-      @casillas << Casilla.new(TipoCasilla::IMPUESTO, 12, 0)
+      @casillas << Casilla.new(12,TipoCasilla::IMPUESTO, 0)
       @casillas << Calle.new(13, titulos[contador+=1])
-      @casillas << Casilla.new(TipoCasilla::CARCEL, 14, 0)
+      @casillas << Casilla.new(14,TipoCasilla::CARCEL, 0)
       @carcel = @casillas[14]
       @casillas << Calle.new(15, titulos[contador+=1])
-      @casillas << Casilla.new(TipoCasilla::SORPRESA, 16, 0)
+      @casillas << Casilla.new(16,TipoCasilla::SORPRESA, 0)
       @casillas << Calle.new(17, titulos[contador+=1])
       @casillas << Calle.new(18, titulos[contador+=1])
       @casillas << Calle.new(19, titulos[contador+=1])
@@ -65,12 +66,12 @@ module ModeloQytetet
     end
     
     def obtener_casilla_final(casilla,desplazamiento)
-      return @casillas[casilla+desplazamiento]%20
-    
+      return @casillas[(casilla.numCasilla+desplazamiento)%20]
     end
     
     def obtener_casilla_numero(numero_casilla)
-      return @casillas[numero_casilla]
+      casilla = @casillas[numero_casilla]
+      return casilla
     end
   end
 end

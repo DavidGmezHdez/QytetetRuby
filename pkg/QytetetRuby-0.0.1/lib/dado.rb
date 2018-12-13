@@ -10,6 +10,10 @@ class Dado
   
   attr_reader :valor
   
+  def to_s
+    "Valor dado: #{@valor} \n "
+  end
+  
   def tirar
     r = rand(1..6)
     @valor=r

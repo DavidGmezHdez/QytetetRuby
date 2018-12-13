@@ -51,7 +51,7 @@ public
   
  
   def comprar_titulo_propiedad
-      coste_compra = @casillaActual.precioCompra
+      coste_compra = @casillaActual.coste
       comprado = false
       
       if coste_compra < @saldo
@@ -93,9 +93,9 @@ public
   return debo_pagar
   end
 
-  def devolver_carta_libertad
-    inter=Sorpresa.new(@carta_libertad.texto,@carta_libertad.tipo,@carta_libertad.sorpresa)
-    @carta_libertad=nil
+  def devolver_cartaLibertad
+    inter=Sorpresa.new(@cartaLibertad.texto,@cartaLibertad.tipo,@cartaLibertad.sorpresa)
+    @cartaLibertad=nil
     return inter
   end
   
@@ -159,9 +159,8 @@ public
   
 
   def ir_a_carcel(casilla)
-    if casilla.tipo == TipoCasilla::CARCEL
-      @casillaActual=casilla
-    end
+     @casillaActual = casilla
+     @encarcelado=true
   end
 
 
@@ -173,8 +172,8 @@ public
 
   def obtener_capital
     resultado=@saldo
-    for i in @propiedades
-      resultado=resultado + i.precioC + (i.precioE*i.numHoteles) 
+    for i in @propiedades do
+      resultado=resultado + i.precioC+ (i.precioE*i.numHoteles) 
       + (i.precioE + i.numCasas)
       if i.hipotecada
         resultado=resultado - i.hipotecaB
@@ -218,7 +217,7 @@ public
   
 
   def tengo_carta_libertad
-    return @carta_libertad!=nil
+    return @cartaLibertad!=nil
   end
   
   
@@ -253,8 +252,8 @@ public
     return 0
   end
   
-  def debo_ir_a_carcel()
-    return !@cartaLibertad
+  def debo_ir_a_carcel
+    return tengo_carta_libertad
   end
   
   def convertime(fianza)

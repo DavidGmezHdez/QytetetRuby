@@ -1,7 +1,9 @@
+require_relative "casilla"
+
 module ModeloQytetet
   class Calle < Casilla
     def initialize(numCasilla, titulo)
-      @coste = titulo.precioCompra
+      @coste = titulo.precioC
       @titulo = titulo
       @numCasilla = numCasilla
       @tipo = TipoCasilla::CALLE
@@ -13,6 +15,7 @@ module ModeloQytetet
     public
     def asignar_propietario(jugador)
       @titulo.propietario = jugador
+      return @titulo
     end
     
     def pagar_alquiler
