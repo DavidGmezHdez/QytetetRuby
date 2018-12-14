@@ -26,7 +26,7 @@ module VistaTextualQytetet
       casillas=Array.new
       auxiliar = Array.new
       casillas=@@controlador.obtener_casillas_validas(opcion_menu)
-      if casillas.size == 0
+      if casillas.empty?
         return -1
       else
         puts "Casillas validas: "
@@ -54,15 +54,17 @@ module VistaTextualQytetet
           puts "Casilla: " + i.to_s
         end
       end
+      
       introducido=gets.chomp.to_i
       
       for i in valores_correctos.each
         if introducido.to_i == i.to_i
           pertenece = true
-          valor_correcto = i
+          valor_correcto = introducido
           break
         end
       end
+    
       
       if !pertenece
         valor_correcto="El valor introducido no coincide con el de las opciones"
@@ -72,9 +74,14 @@ module VistaTextualQytetet
      
     end
     def elegir_operacion()
-      lista=Array.new
       lista=@@controlador.obtener_operaciones_juego_validas
-      return leer_valor_correcto(lista,true)
+      convertidos = Array.new
+      
+      for i in lista.each
+        convertidos << i.to_s
+      end
+      
+      return leer_valor_correcto(lista,true).to_i
     end
     
     def self.main
@@ -89,7 +96,9 @@ module VistaTextualQytetet
         if necesita_elegir_casilla
           casilla_elegida=ui.elegir_casilla(operacion_elegida)
         end
-        if !necesita_elegir_casilla || casilla_elegida>0
+        puts casilla_elegida
+        puts operacion_elegida
+        if !necesita_elegir_casilla || casilla_elegida>=0
           puts @@controlador.realizar_operacion(operacion_elegida, casilla_elegida)
         end
         break if 1!=1

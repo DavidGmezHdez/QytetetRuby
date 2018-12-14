@@ -31,8 +31,7 @@ class Jugador
     
     attr_reader :nombre, :saldo
     attr_accessor :encarcelado, :cartaLibertad, :casillaActual, :propiedades
-
-  protected
+    
     def to_s
         capital=obtener_capital
             "Jugador: #{@nombre} \n encarcelado: #{@encarcelado} \n 
@@ -42,9 +41,10 @@ public
   def cancelar_hipoteca(titulo)
     puede_cancelar=false
     coste_cancelar=titulo.calcular_coste_cancelar
-    if @saldo>coste_cancelar
-      titulo.cancelar_hipoteca
+    if tengo_saldo(coste_cancelar)
       puede_cancelar=true
+      modificar_saldo(-coste_cancelar)
+      titulo.cancelar_hipoteca
     end
     return puede_cancelar
   end
@@ -103,7 +103,6 @@ public
   def edificar_casa(titulo)
     coste_edificar_casa=titulo.precioE
     edificada=false
-    
     if puedo_edificar_casa(titulo)
       titulo.edificar_casa
       modificar_saldo(-coste_edificar_casa)
@@ -114,14 +113,13 @@ public
   
 
   def edificar_hotel(titulo)
-    coste_edificar_hotel=titulo.precioE
     edificada=false
     if puedo_edificar_hotel(titulo)
+      coste_edificar_hotel=titulo.precioE
       titulo.edificar_hotel
       modificar_saldo(-coste_edificar_hotel)
-      edificada=true
-    end
-    return edificada
+      end
+      return edificada
   end
 
 
@@ -222,11 +220,7 @@ public
   
   
   def tengo_saldo(cantidad)
-    resultado=false
-    if @saldo>cantidad
-      resultado=true
-    end
-    return resultado
+    return @saldo>cantidad
   end
   
   
@@ -238,8 +232,8 @@ public
   end
   
   def <=>(otroJugador)
-    otroCapital= otroJugador.obtenerCapital
-    miCapital=obtenerCapital
+    otroCapital= otroJugador.obtener_capital
+    miCapital=obtener_capital
     
     if (otroCapital>miCapital)
       return 1 
@@ -263,33 +257,15 @@ public
   
   def puedo_edificar_casa(titulo)
     hay_espacio=titulo.numCasas<4
-    tengo_saldo=false
-    coste_edificar_casa=0
-    if hay_espacio
-      coste_edificar_casa=titulo.precioE
-      tengo_saldo=tengo_saldo(coste_edificar_casa)
-    end
-    if hay_espacio && tengo_saldo
-        @casillaActual.titulo.edificar_casa
-        modificar_saldo(-coste_edificar_casa)
-    end
-    edificada=hay_espacio && tengo_saldo
-    return edificada
+    tengo_saldo=tengo_saldo(titulo.precioE)
+    return tengo_saldo && hay_espacio
   end
   
   def puedo_edificar_hotel(titulo)
-    edificada=false
-    num_hoteles=titulo.numHoteles
-    if num_hoteles<4
-      coste_edificar_hotel=titulo.precioE
-      tengo_saldo=tengo_saldo(coste_edificar_hotel)
-      if tengo_saldo
-        @casillaActual.titulo.edificar_hotel
-        modificar_saldo(-coste_edificar_hotel)
-        edificada=true
-      end
-    end
-    return edificada
+    hay_casas=titulo.numCasas >=4
+    hay_hoteles=titulo.numHoteles < 4
+    tengo_saldo=tengo_saldo(titulo.precioE)
+    return tengo_saldo && hay_casas && hay_hoteles
   end
   
   

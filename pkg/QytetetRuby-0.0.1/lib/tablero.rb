@@ -1,12 +1,18 @@
 # encoding: utf-8
-
+require_relative "casilla"
 require_relative "calle"
+require_relative "titulo_propiedad"
+require_relative "tipo_casilla"
 module ModeloQytetet
   class Tablero
     
     def initialize
-      @casillas = Array.new
       inicializar
+    end
+    
+    def self.new_casillas(casillas,carcel)
+      @casillas = casillas
+      @carcel=carcel
     end
     
     attr_reader :carcel, :casillas
@@ -17,7 +23,7 @@ module ModeloQytetet
     
     private
     def inicializar
-
+      @casillas=Array.new
       titulos = Array.new
       contador = 0
       # Creamos primero todos los titulos de propiedad
@@ -36,32 +42,32 @@ module ModeloQytetet
       
       # Ahora creamos todas las casillas
       @casillas << Casilla.new(0,TipoCasilla::SALIDA, 1000)
-      @casillas << Calle.new(1, titulos[contador])
+      @casillas << Calle.new(1, titulos[0])
       @casillas << Casilla.new(2,TipoCasilla::SORPRESA, 0)
-      @casillas << Calle.new(3, titulos[contador+=1])
+      @casillas << Calle.new(3, titulos[1])
       @casillas << Casilla.new(4,TipoCasilla::JUEZ, 0)
-      @casillas << Calle.new( 5, titulos[contador+=1])
+      @casillas << Calle.new( 5, titulos[2])
       @casillas << Casilla.new(6,TipoCasilla::PARKING, 0)
-      @casillas << Calle.new(7, titulos[contador+=1])
+      @casillas << Calle.new(7, titulos[3])
       @casillas << Casilla.new(8,TipoCasilla::SORPRESA, 0)
-      @casillas << Calle.new(9, titulos[contador+=1])
-      @casillas << Calle.new(10, titulos[contador+=1])
-      @casillas << Calle.new(11, titulos[contador+=1])
+      @casillas << Calle.new(9, titulos[4])
+      @casillas << Calle.new(10, titulos[5])
+      @casillas << Calle.new(11, titulos[6])
       @casillas << Casilla.new(12,TipoCasilla::IMPUESTO, 0)
-      @casillas << Calle.new(13, titulos[contador+=1])
+      @casillas << Calle.new(13, titulos[7])
       @casillas << Casilla.new(14,TipoCasilla::CARCEL, 0)
       @carcel = @casillas[14]
-      @casillas << Calle.new(15, titulos[contador+=1])
+      @casillas << Calle.new(15, titulos[8])
       @casillas << Casilla.new(16,TipoCasilla::SORPRESA, 0)
-      @casillas << Calle.new(17, titulos[contador+=1])
-      @casillas << Calle.new(18, titulos[contador+=1])
-      @casillas << Calle.new(19, titulos[contador+=1])
+      @casillas << Calle.new(17, titulos[9])
+      @casillas << Calle.new(18, titulos[10])
+      @casillas << Calle.new(19, titulos[11])
       
     end
     
     public
     def es_casilla_carcel(numero_casilla)
-      return @carcel==numero_casilla
+      return @carcel.numCasilla==numero_casilla
       
     end
     
@@ -70,8 +76,7 @@ module ModeloQytetet
     end
     
     def obtener_casilla_numero(numero_casilla)
-      casilla = @casillas[numero_casilla]
-      return casilla
+      return @casillas[numero_casilla]
     end
   end
 end

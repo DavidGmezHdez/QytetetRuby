@@ -13,7 +13,7 @@ module ModeloQytetet
       @hipotecada = false
       @numHoteles = 0
       @numCasas = 0
-      @propietario
+      @propietario=nil
     end
     
     attr_reader :nombre, :precioC, :alquilerB, :factorB,
@@ -56,7 +56,6 @@ module ModeloQytetet
     
     def cancelar_hipoteca
       @hipotecada=false
-      return true
     end
     
     def edificar_casa
@@ -65,6 +64,7 @@ module ModeloQytetet
     
     def edificar_hotel    
       @numHoteles=@numHoteles+1
+      @numCasas = @numCasas - 4
     end
     
     def hipotecar

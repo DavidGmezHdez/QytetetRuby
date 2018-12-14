@@ -1,6 +1,4 @@
  #encoding: utf-8
-
-include ModeloQytetet::MetodoSalirCarcel
 module ControladorQytetet
 OpcionMenu = [:INICIARJUEGO,:JUGAR,:APLICARSORPRESA,
 :INTENTARSALIRCARCELPAGANDOLIBERTAD,:INTENTARSALIRCARCELTIRANDODADO,

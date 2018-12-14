@@ -19,132 +19,114 @@ module ControladorQytetet
     def obtener_operaciones_juego_validas()
       lista= Array.new
       
-      if @@modelo.jugadores.size == 0
+      if @nombre_jugadores.empty?
         lista<<OpcionMenu.index(:INICIARJUEGO)
       else
       case @@modelo.estado
-      when ModeloQytetet::EstadoJuego::JA_PREPARADO
-          lista << OpcionMenu.index(:JUGAR)
-          lista << OpcionMenu.index(:OBTENERRANKING)
-          lista << OpcionMenu.index(:MOSTRARJUGADORACTUAL)
-          lista << OpcionMenu.index(:MOSTRARJUGADORES)
-          lista << OpcionMenu.index(:MOSTRARTABLERO)
-          lista << OpcionMenu.index(:TERMINARJUEGO)
-      when ModeloQytetet::EstadoJuego::JA_PUEDEGESTIONAR
-          lista << OpcionMenu.index(:PASARTURNO)
-          lista << OpcionMenu.index(:OBTENERRANKING)
-          lista << OpcionMenu.index(:MOSTRARJUGADORACTUAL)
-          lista << OpcionMenu.index(:MOSTRARJUGADORES)
-          lista << OpcionMenu.index(:MOSTRARTABLERO)
-          lista << OpcionMenu.index(:TERMINARJUEGO)
-          if !@@modelo.obtener_propiedades_jugador == 0
-            lista << OpcionMenu.index(:VENDERPROPIEDAD)
-            lista << OpcionMenu.index(:HIPOTECARPROPIEDAD)
-            lista << OpcionMenu.index(:CANCELARHIPOTECA)
-            lista << OpcionMenu.index(:EDIFICARCASA)
-            lista << OpcionMenu.index(:EDIFICARHOTEL)
-          end
-      when ModeloQytetet::EstadoJuego::JA_PUEDECOMPRAROGESTIONAR
-          lista << OpcionMenu.index(:PASARTURNO)
-          lista << OpcionMenu.index(:OBTENERRANKING)
-          lista << OpcionMenu.index(:MOSTRARJUGADORACTUAL)
-          lista << OpcionMenu.index(:MOSTRARJUGADORES)
-          lista << OpcionMenu.index(:MOSTRARTABLERO)
-          lista << OpcionMenu.index(:COMPRARTITULOPROPIEDAD)
-          lista << OpcionMenu.index(:TERMINARJUEGO)
-          
-          if !@@modelo.obtener_propiedades_jugador == 0
-            lista << OpcionMenu.index(:VENDERPROPIEDAD)
-            lista << OpcionMenu.index(:HIPOTECARPROPIEDAD)
-            lista << OpcionMenu.index(:CANCELARHIPOTECA)
-            lista << OpcionMenu.index(:EDIFICARCASA)
-            lista << OpcionMenu.index(:EDIFICARHOTEL)
-          end
-      when ModeloQytetet::EstadoJuego::JA_ENCARCELADOCONOPCIONDELIBERTAD
-          lista << OpcionMenu.index(:INTENTARSALIRCARCELTIRANDODADO)
-          lista << OpcionMenu.index(:INTENTARSALIRCARCELPAGANDOLIBERTAD)
-          lista << OpcionMenu.index(:OBTENERRANKING)
-          lista << OpcionMenu.index(:MOSTRARJUGADORACTUAL)
-          lista << OpcionMenu.index(:MOSTRARJUGADORES)
-          lista << OpcionMenu.index(:MOSTRARTABLERO)
-          lista << OpcionMenu.index(:TERMINARJUEGO)
-      when ModeloQytetet::EstadoJuego::JA_ENCARCELADO
-          lista << OpcionMenu.index(:PASARTURNO)
-          lista << OpcionMenu.index(:OBTENERRANKING)
-          lista << OpcionMenu.index(:MOSTRARJUGADORACTUAL)
-          lista << OpcionMenu.index(:MOSTRARJUGADORES)
-          lista << OpcionMenu.index(:MOSTRARTABLERO)
-          lista << OpcionMenu.index(:TERMINARJUEGO)
       when ModeloQytetet::EstadoJuego::JA_CONSORPRESA
-          lista << OpcionMenu.index(:APLICARSORPRESA)
+        lista<<OpcionMenu.index(:APLICARSORPRESA)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORACTUAL)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORES)
+        lista<<OpcionMenu.index(:MOSTRARTABLERO)
+        lista<<OpcionMenu.index(:TERMINARJUEGO)
+      when ModeloQytetet::EstadoJuego::JA_PREPARADO
+        lista<<OpcionMenu.index(:JUGAR)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORACTUAL)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORES)
+        lista<<OpcionMenu.index(:MOSTRARTABLERO)
+        lista<<OpcionMenu.index(:TERMINARJUEGO)
+      when ModeloQytetet::EstadoJuego::JA_PUEDEGESTIONAR
+        lista<<OpcionMenu.index(:PASARTURNO)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORACTUAL)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORES)
+        lista<<OpcionMenu.index(:MOSTRARTABLERO)
+        lista<<OpcionMenu.index(:TERMINARJUEGO)
+        if !@@modelo.obtener_propiedades_jugador.empty?
+          lista<<OpcionMenu.index(:EDIFICARCASA)
+          lista<<OpcionMenu.index(:EDIFICARHOTEL)
+          lista<<OpcionMenu.index(:HIPOTECARPROPIEDAD)
+          lista<<OpcionMenu.index(:VENDERPROPIEDAD)
+          if !@@modelo.obtener_propiedades_jugador_segun_estado_hipoteca(true).empty?
+            lista<<OpcionMenu.index(:CANCELARHIPOTECA)
+          end
+        end
+      when ModeloQytetet::EstadoJuego::JA_PUEDECOMPRAROGESTIONAR
+        lista<<OpcionMenu.index(:PASARTURNO)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORACTUAL)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORES)
+        lista<<OpcionMenu.index(:MOSTRARTABLERO)
+        lista<<OpcionMenu.index(:TERMINARJUEGO)
+        lista<<OpcionMenu.index(:COMPRARTITULOPROPIEDAD)
+        if !@@modelo.obtener_propiedades_jugador.empty?
+          lista<<OpcionMenu.index(:EDIFICARCASA)
+          lista<<OpcionMenu.index(:EDIFICARHOTEL)
+          lista<<OpcionMenu.index(:HIPOTECARPROPIEDAD)
+          lista<<OpcionMenu.index(:VENDERPROPIEDAD)
+          if !@@modelo.obtener_propiedades_jugador_segun_estado_hipoteca(true).empty?
+            lista<<OpcionMenu.index(:CANCELARHIPOTECA)
+          end
+        end
       when ModeloQytetet::EstadoJuego::ALGUNJUGADORENBANCARROTA
-          lista << OpcionMenu.index(:OBTENERRANKING)
-          lista << OpcionMenu.index(:TERMINARJUEGO)
-          lista << OpcionMenu.index(:MOSTRARJUGADORACTUAL)
-          lista << OpcionMenu.index(:MOSTRARJUGADORES)
-          lista << OpcionMenu.index(:MOSTRARTABLERO)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORACTUAL)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORES)
+        lista<<OpcionMenu.index(:MOSTRARTABLERO)
+        lista<<OpcionMenu.index(:TERMINARJUEGO)
+      when ModeloQytetet::EstadoJuego::JA_ENCARCELADO
+        lista<<OpcionMenu.index(:PASARTURNO)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORACTUAL)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORES)
+        lista<<OpcionMenu.index(:MOSTRARTABLERO)
+        lista<<OpcionMenu.index(:TERMINARJUEGO)
+      when ModeloQytetet::EstadoJuego::JA_ENCARCELADOCONOPCIONDELIBERTAD
+        lista<<OpcionMenu.index(:MOSTRARJUGADORACTUAL)
+        lista<<OpcionMenu.index(:MOSTRARJUGADORES)
+        lista<<OpcionMenu.index(:MOSTRARTABLERO)
+        lista<<OpcionMenu.index(:TERMINARJUEGO)
+        lista<<OpcionMenu.index(:INTENTARSALIRCARCELPAGANDOLIBERTAD)
+        lista<<OpcionMenu.index(:INTENTARSALIRCARCELTIRANDODADO)
+        end
       end
-      end
-      
       return lista
     end
-
     def necesita_elegir_casilla(opcion_menu)
       necesita_elegir = false
-      if opcion_menu == OpcionMenu.index(:HIPOTECARPROPIEDAD)
-        necesita_elegir=true
+      if (opcion_menu == OpcionMenu.index(:HIPOTECARPROPIEDAD) || opcion_menu == OpcionMenu.index(:CANCELARHIPOTECA) || 
+          opcion_menu == OpcionMenu.index(:EDIFICARCASA) || opcion_menu == OpcionMenu.index(:EDIFICARHOTEL) || 
+          opcion_menu == OpcionMenu.index(:VENDERPROPIEDAD)) 
+          necesita_elegir = true
       end
-      if opcion_menu == OpcionMenu.index(:VENDERPROPIEDAD)
-        necesita_elegir=true
-      end
-      if opcion_menu == OpcionMenu.index(:CANCELARHIPOTECA)
-        necesita_elegir=true
-      end
-      if opcion_menu == OpcionMenu.index(:EDIFICARCASA)
-        necesita_elegir=true
-      end
-      if opcion_menu == OpcionMenu.index(:EDIFICARHOTEL)
-        necesita_elegir=true
-      end
-      return necesita_elegir
+        return necesita_elegir
     end
-    
     def obtener_casillas_validas(opcion_menu)
       casillas_validas=Array.new
-#      if opcion_menu == OpcionMenu.index(:HIPOTECARPROPIEDAD)
-#        casillas_validas=@@modelo.obtener_propiedades_jugador
-#      else
-#        if opcion_menu == OpcionMenu.index(:VENDERPROPIEDAD)
-#          casillas_validas=@@modelo.obtener_propiedades_jugador
-#        else
-#          if opcion_menu == OpcionMenu.index(:CANCELARHIPOTECA)
-#            casillas_validas=@@modelo.obtener_propiedades_jugador_segun_estado_hipoteca(true)
-#          else
-#            if opcion_menu == OpcionMenu.index(:EDIFICARCASA)
-#              casillas_validas=@@modelo.obtener_propiedades_jugador
-#            else
-#              if opcion_menu == OpcionMenu.index(:EDIFICARHOTEL)
-#                casillas_validas=@@modelo.obtener_propiedades_jugador
-#              end
-#            end
-#          end
-#        end
-#      end
-      
-      case opcion_menu
-        when OpcionMenu.index(:HIPOTERCARPROPIEDAD)
+      if opcion_menu == OpcionMenu.index(:HIPOTECARPROPIEDAD)
+        casillas_validas=@@modelo.obtener_propiedades_jugador
+      else
+        if opcion_menu == OpcionMenu.index(:VENDERPROPIEDAD)
           casillas_validas=@@modelo.obtener_propiedades_jugador
-        when OpcionMenu.index(:VENDERPROPIEDAD)
-          casillas_validas=@@modelo.obtener_propiedades_jugador
-        when OpcionMenu.index(:CANCELARHIPOTECA)
-          casillas_validas=@@modelo.obtener_propiedades_jugador_segun_estado_hipoteca(true)
-        when OpcionMenu.index(:EDIFICARCASA)
-          casillas_validas=@@modelo.obtener_propiedades_jugador
-        when OpcionMenu.index(:EDIFICARHOTEL)
-          casillas_validas=@@modelo.obtener_propiedades_jugador
+        else
+          if opcion_menu == OpcionMenu.index(:CANCELARHIPOTECA)
+            casillas_validas=@@modelo.obtener_propiedades_jugador_segun_estado_hipoteca(true)
+          else
+            if opcion_menu == OpcionMenu.index(:EDIFICARCASA)
+              casillas_validas=@@modelo.obtener_propiedades_jugador
+            else
+              if opcion_menu == OpcionMenu.index(:EDIFICARHOTEL)
+                casillas_validas=@@modelo.obtener_propiedades_jugador
+              end
+            end
+          end
+        end
       end
       
-      
+#      case opcion_menu
+#        when OpcionMenu.index(:HIPOTERCARPROPIEDAD)
+#          casillas_validas=@@modelo.obtener_propiedades_jugador_segun_estado_hipoteca(false)
+#        when OpcionMenu.index(:VENDERPROPIEDAD) || OpcionMenu.index(:EDIFICARCASA) || OpcionMenu.index(:EDIFICARHOTEL)
+#          casillas_validas=@@modelo.obtener_propiedades_jugador
+#        when OpcionMenu.index(:CANCELARHIPOTECA)
+#          casillas_validas=@@modelo.obtener_propiedades_jugador_segun_estado_hipoteca(true)
+#      end
       return casillas_validas
     end
     
@@ -162,19 +144,20 @@ module ControladorQytetet
       when OpcionMenu.index(:INTERNTARSALIRCARCELPAGANDOLIBERTAD) #INTENTAR SALIR CARCEL PAGANDO LIBERTAD
         salido=@@metodo.intentar_salir_carcel(ModeloQytetet::MetodoSalirCarcel::PAGANDOLIBERTAD)
         if salido
-          resultado = "¡Has salido de soto del real"
+          resultado = "Te has caido con las prisas y no has conseguido escapar.Además de pobre eres topre"
         else
-          resultado = "Te has caido con las prisas y no has conseguido escapar"
+          resultado = "¡Has salido de soto del real pagando suciamente"
         end
       when OpcionMenu.index(:INTENTARSALIRCARCELTIRANDODADO) #INTENTAR SALIR CARCEL TIRANDO DADO  
         salido = @@modelo.intentar_salir_carcel(ModeloQytetet::MetodoSalirCarcel::TIRANDODADO)
         if salido
-          resultado = "¡Has salido de soto del real"
+          resultado = "Te has caido con las prisas y no has conseguido escapar. Te han echado mal de ojo"
         else
-          resultado = "Te has caido con las prisas y no has conseguido escapar"
+          resultado = "¡Has salido de soto del real. la suerte está de tu lado."
         end
       when OpcionMenu.index(:COMPRARTITULOPROPIEDAD)#COMPRAR TITULO PROPIEDAD
         comprado=@@modelo.comprar_titulo_propiedad
+        puts "comprar_titulo"
         if comprado
           resultado = "Enhorabuena ahora tienes una propiedad más"
         else
@@ -205,25 +188,24 @@ module ControladorQytetet
           resultado = "Hotel no construido, el arquitecto te ha devuelto los papeles"
         end
       when OpcionMenu.index(:VENDERPROPIEDAD) #VENDER PROPIEDAD
-        resultado = "Has vendido la propiedad. Espero que te acordaras de coger al gato"
         @@modelo.vender_propiedad(casilla_elegida)
+        resultado = "Has vendido la propiedad. Espero que te acordaras de coger al gato"
       when OpcionMenu.index(:PASARTURNO) #PASAR TURNO
-        resultado = "Cambio de jugador"
         @@modelo.siguiente_jugador
+        resultado = "Cambio de jugador"
       when OpcionMenu.index(:OBTENERRANKING) #OBTENER RANKING
-        resultado = "Imprimiendo el ranking de los jugadores"
         @@modelo.obtener_ranking
+        resultado = "Imprimiendo el ranking de los jugadores"
       when OpcionMenu.index(:MOSTRARJUGADORACTUAL) #MOSTRAR JUGADOR ACTUAL
-        resultado = "Imrpimiendo el jugador actual"
-        @@modelo.jugador_actual
+        puts @@modelo.jugador_actual.to_s
       when OpcionMenu.index(:MOSTRARJUGADORES) #MOSTRAR JUGADORES
-        resultado = "Imprimiendo los jugadores"
-        @@modelo.jugadores
+        puts @@modelo.jugadores.to_s
       when OpcionMenu.index(:MOSTRARTABLERO) #MOSTRAR TABLERO
-        resultado = "Imprimiendo tablero"
-        @@modelo.tablero.to_s
+        puts @@modelo.tablero.to_s
       when OpcionMenu.index(:TERMINARJUEGO) #TERMINAR JUEGO
         resultado = "Cerrando juego"
+        @@modelo.obtener_ranking
+        puts @@modelo.jugadores.to_s
         exit(0)
       end
     end
