@@ -10,6 +10,7 @@ require_relative 'dado'
 require_relative 'jugador'
 require_relative "calle"
 require_relative "metodo_salir_carcel"
+require_relative "especulador"
 
 
 
@@ -25,7 +26,7 @@ module ModeloQytetet
     
     def initialize
       @mazo = Array.new
-      @carta_actual=nil
+      @carta_actual
       @jugador_actual=nil
       @jugadores=Array.new
       @dado=Dado.instance
@@ -39,18 +40,19 @@ module ModeloQytetet
     
     private
     def inicializar_cartas_sorpresa
-      @mazo << Sorpresa.new("Te han pillado saqueando las arcas públicas del estado, vas a la cárcel.", @tablero.carcel.numCasilla, TipoSorpresa::IRACASILLA)
-      @mazo << Sorpresa.new("No sabemos si estabas cerca de la casilla inicial o no, pero ahora lo vas a estar.", 1, TipoSorpresa::IRACASILLA)
-      @mazo << Sorpresa.new("¿Eres supersticioso?", 13, TipoSorpresa::IRACASILLA)
-      @mazo << Sorpresa.new("Resulta que un funcionario de la cárcel es amigo tuyo. De casualidades está hecha la vida. Sales de la cárcel.", 0, TipoSorpresa::SALIRCARCEL)
-      @mazo << Sorpresa.new("¡Te conviertes en especulador!", 3000, TipoSorpresa::CONVERTIRME)
-      @mazo << Sorpresa.new("Tus rivales te odian tanto que les obligamos a que te den lo que lleven suelto en la cartera.", 200, TipoSorpresa::PORJUGADOR)
-      @mazo << Sorpresa.new("Parece que te está gustando el juego, por eso tendrás que recompensar a tus rivales.", -300, TipoSorpresa::PORJUGADOR)
       @mazo << Sorpresa.new("¡Te conviertes en especulador!", 5000, TipoSorpresa::CONVERTIRME)
+      @mazo << Sorpresa.new("Te han pillado saqueando las arcas públicas del estado, vas a la cárcel.", @tablero.carcel.numCasilla, TipoSorpresa::IRACASILLA)
+      @mazo << Sorpresa.new("Estás de suerte. Tus propiedades acaban de evadir impuestos y te dan algo más de dinero extra.", 200, TipoSorpresa::PORCASAHOTEL)
       @mazo << Sorpresa.new("¡Enhorabuena! Te ha tocado la lotería, pero la agencia tributaria se va a quedar casi todo.", 250, TipoSorpresa::PAGARCOBRAR)
+      @mazo << Sorpresa.new("Tus rivales te odian tanto que les obligamos a que te den lo que lleven suelto en la cartera.", 200, TipoSorpresa::PORJUGADOR)
+      @mazo << Sorpresa.new("¡Te conviertes en especulador!", 3000, TipoSorpresa::CONVERTIRME)
+      @mazo << Sorpresa.new("Resulta que un funcionario de la cárcel es amigo tuyo. De casualidades está hecha la vida. Sales de la cárcel.", 0, TipoSorpresa::SALIRCARCEL)
+      @mazo << Sorpresa.new("¿Eres supersticioso?", 13, TipoSorpresa::IRACASILLA)
+      @mazo << Sorpresa.new("No sabemos si estabas cerca de la casilla inicial o no, pero ahora lo vas a estar.", 1, TipoSorpresa::IRACASILLA)
+      @mazo << Sorpresa.new("Parece que te está gustando el juego, por eso tendrás que recompensar a tus rivales.", -300, TipoSorpresa::PORJUGADOR)
       @mazo << Sorpresa.new("Vamos a jugar a algo, tú me das algo de dinero y yo no te doy nada. ¿Qué te parece?", -250, TipoSorpresa::PAGARCOBRAR)
       @mazo << Sorpresa.new("Vaya, esta sorpresa parece que te va a quitar algo de dinero por los hoteles y casas de tus rivales, siempre y cuando tú estés de acuerdo... o no.", -150, TipoSorpresa::PORCASAHOTEL)
-      @mazo << Sorpresa.new("Estás de suerte. Tus propiedades acaban de evadir impuestos y te dan algo más de dinero extra.", 200, TipoSorpresa::PORCASAHOTEL)
+      @mazo=@mazo.shuffle
     end
     protected
     def actuar_si_en_casilla_edificable
@@ -79,18 +81,23 @@ module ModeloQytetet
     end   
     protected
     def actuar_si_en_casilla_no_edificable
-      @estado=EstadoJuego::JA_PUEDEGESTIONAR
-      casilla=@jugador_actual.casillaActual
+      @estado = EstadoJuego::JA_PUEDEGESTIONAR
+      casilla = @jugador_actual.casillaActual
       
-      case casilla.tipo
-      when TipoCasilla::IMPUESTO
+      if casilla.tipo == TipoCasilla::IMPUESTO
         @jugador_actual.pagar_impuesto
-      when TipoCasilla::JUEZ
-        encarcelar_jugador
-      when TipoCasilla::SORPRESA
-        @carta_actual=@mazo.at(0)
-        @mazo.delete(0)
-        @estado=EstadoJuego::JA_CONSORPRESA
+        if @jugador_actual.saldo <= 0
+          @estado = EstadoJuego::ALGUNJUGADORENBANCARROTA
+        end
+      else
+        if casilla.tipo == TipoCasilla::JUEZ
+          encarcelar_jugador
+        else
+          if casilla.tipo == TipoCasilla::SORPRESA
+            @carta_actual=@mazo.delete_at(0)
+            @estado = EstadoJuego::JA_CONSORPRESA
+          end
+        end
       end
     end
     
@@ -99,14 +106,14 @@ module ModeloQytetet
      @estado=EstadoJuego::JA_PUEDEGESTIONAR
       
       if @carta_actual.tipo == TipoSorpresa::SALIRCARCEL
-        @jugador_actual.cartaLibertad(@carta_actual)
+        @jugador_actual.cartaLibertad=@carta_actual
         
       else
         @mazo.push(@carta_actual)
         
         case @carta_actual.tipo
         when TipoSorpresa::PAGARCOBRAR
-          @jugador_actual.modificar_saldo(@carta_actual.valor)
+          @jugador_actual.modificar_saldo(-@carta_actual.valor)
           if @jugador_actual.saldo < 0
             @estado=EstadoJuego::ALGUNJUGADORENBANCARROTA
             break
@@ -128,28 +135,29 @@ module ModeloQytetet
           if @jugador_actual.saldo < 0
             @estado=EstadoJuego::ALGUNJUGADORENBANCARROTA
           end
-        when TiporSorpresa::CONVERTIRME
+        when TipoSorpresa::CONVERTIRME
+          indice = @jugadores.index(@jugador_actual)
           @jugador_actual=@jugador_actual.convertime(@carta_actual.valor)
+          @jugadores[indice]=@jugador_actual
         when TipoSorpresa::PORJUGADOR
-          for i in @jugadores
-            siguiente_jugador
-            
-            @jugador_actual.modificar_saldo(@carta_actual.valor)
-            
-            if @jugador_actual.saldo < 0
-              @estado=EstadoJuego::ALGUNJUGADORENBANCARROTA
-            end
-            
-            @jugador_actual.modificar_saldo(-@carta_actual.valor)
-            
-            if @jugador_actual.saldo < 0
-              @estado=EstadoJuego::ALGUNJUGADORENBANCARROTA
-            end
+            for jugador in @jugadores
+            if jugador!=@jugador_actual
+              jugador.modificar_saldo(@carta_actual.valor)
+              
+              if jugador.saldo<=0
+                @estado= EstadoJuego::ALGUNJUGADORENBANCARROTA
+              end
+              
+              @jugador_actual.modificar_saldo(-@carta_actual.valor)
+              
+              if @jugador_actual.saldo<=0
+                @estado = EstadoJuego::ALGUNJUGADORENBANCARROTA
+              end
+              end
           end
         end
       end
     end
-
 
     def cancelar_hipoteca(numero_casilla)
       casilla=@tablero.obtener_casilla_numero(numero_casilla)
@@ -180,9 +188,11 @@ module ModeloQytetet
       if edificada
         @estado=EstadoJuego::JA_PUEDEGESTIONAR
       end
+      return edificada
     end
 
     def edificar_hotel(numero_casilla)
+      edificada=false
       casilla=@tablero.obtener_casilla_numero(numero_casilla)
       if casilla.tipo == TipoCasilla::CALLE && casilla.titulo.numCasas >=4
         titulo=casilla.titulo
@@ -191,6 +201,7 @@ module ModeloQytetet
       if edificada
         @estado=EstadoJuego::JA_PUEDEGESTIONAR
       end
+      return edificada
     end
 
 
@@ -231,7 +242,7 @@ module ModeloQytetet
     private
     def inicializar_jugadores(nombres)
     nombres.each{ |nombre|
-    @jugadores << Jugador.nuevo(nombre)
+    @jugadores << Jugador.new(nombre)
     }
     end
     public
@@ -246,7 +257,8 @@ module ModeloQytetet
       
       
       else
-      if metodo==MetodoSalirCarcel::TIRANDODADO
+        if
+       metodo==MetodoSalirCarcel::TIRANDODADO
         puts "Tirando dado..."
         resultado=tirar_dado
         puts "Ha salido un " + resultado.to_s

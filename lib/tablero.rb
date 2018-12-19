@@ -53,7 +53,7 @@ module ModeloQytetet
       @casillas << Calle.new(9, titulos[4])
       @casillas << Calle.new(10, titulos[5])
       @casillas << Calle.new(11, titulos[6])
-      @casillas << Casilla.new(12,TipoCasilla::IMPUESTO, 0)
+      @casillas << Casilla.new(12,TipoCasilla::IMPUESTO, 500)
       @casillas << Calle.new(13, titulos[7])
       @casillas << Casilla.new(14,TipoCasilla::CARCEL, 0)
       @carcel = @casillas[14]

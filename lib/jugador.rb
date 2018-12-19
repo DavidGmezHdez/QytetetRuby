@@ -1,6 +1,11 @@
 # encoding: utf-8
 module ModeloQytetet
 class Jugador
+    
+   attr_reader :nombre, :saldo
+   attr_accessor :encarcelado, :cartaLibertad, :casillaActual, :propiedades
+  
+  
   def initialize(nombre)
       @encarcelado = false
       @nombre = nombre
@@ -9,33 +14,21 @@ class Jugador
       @casillaActual=0
       @propiedades = Array.new
   end
-  
-  
-  
-  def self.nuevo (nombre)
-    new(nombre)
-  end
+
+#  def self.nuevo (nombre)
+#    new(nombre)
+#  end
 
   
   def self.copia(jugador)
-    @encarcelado = jugador.encarcelado
-    @nombre = jugador.nombre
-    @saldo=jugador.saldo
-    @cartaLibertad=jugador.cartaLibertad
-    @casillaActual=jugador.casillaActual
-    @propiedades=jugador.propiedades
-    
+    self.new(jugador.nombre)
   end
   
   
-    
-    attr_reader :nombre, :saldo
-    attr_accessor :encarcelado, :cartaLibertad, :casillaActual, :propiedades
-    
     def to_s
         capital=obtener_capital
             "Jugador: #{@nombre} \n encarcelado: #{@encarcelado} \n 
-      propiedades: #{@propiedades} \n saldo: #{@saldo} \n capital: #{capital} \n casillaActual: #{@casillaActual}"
+      propiedades: #{@propiedades} \n saldo: #{@saldo} \n capital: #{capital} \n casillaActual: #{@casillaActual}\n"
     end
 public
   def cancelar_hipoteca(titulo)
@@ -65,8 +58,8 @@ public
 
   def cuantas_casas_hoteles_tengo
     contador=0
-    for i in @propiedades.size
-      contador=contador + @propiedades[i].numCasas + @propiedades[i].numHoteles
+    for i in @propiedades
+      contador=contador + i.numCasas + i.numHoteles
     end
     return contador
   end  
@@ -93,7 +86,7 @@ public
   return debo_pagar
   end
 
-  def devolver_cartaLibertad
+  def devolver_carta_libertad
     inter=Sorpresa.new(@cartaLibertad.texto,@cartaLibertad.tipo,@cartaLibertad.sorpresa)
     @cartaLibertad=nil
     return inter
@@ -118,6 +111,7 @@ public
       coste_edificar_hotel=titulo.precioE
       titulo.edificar_hotel
       modificar_saldo(-coste_edificar_hotel)
+      edificada=true
       end
       return edificada
   end
@@ -200,7 +194,8 @@ public
   
 
   def pagar_impuesto
-    @saldo=@saldo-@casillaActual.coste
+    coste_impuesto=@casillaActual.coste
+    modificar_saldo(-coste_impuesto)
   end
 
  
@@ -251,7 +246,7 @@ public
   end
   
   def convertime(fianza)
-    especulador=especulador(fianza,self)
+    especulador=Especulador.copia(self,fianza)
     return especulador
   end
   
@@ -267,7 +262,6 @@ public
     tengo_saldo=tengo_saldo(titulo.precioE)
     return tengo_saldo && hay_casas && hay_hoteles
   end
-  
   
   private :es_de_mi_propiedad, :eliminar_de_mis_propiedades
  end

@@ -4,6 +4,7 @@ require "singleton"
 require_relative "qytetet"
 require_relative 'opcion_menu'
 require_relative "estado_juego"
+require_relative"metodo_salir_carcel"
 
 module ControladorQytetet
   class ControladorQytetet
@@ -19,7 +20,7 @@ module ControladorQytetet
     def obtener_operaciones_juego_validas()
       lista= Array.new
       
-      if @nombre_jugadores.empty?
+      if @@modelo.jugadores.empty?
         lista<<OpcionMenu.index(:INICIARJUEGO)
       else
       case @@modelo.estado
@@ -137,12 +138,12 @@ module ControladorQytetet
         @@modelo.inicializar_juego(@nombre_jugadores)
       when OpcionMenu.index(:JUGAR) #JUGAR
         @@modelo.jugar
-        resultado="Valor dado " + @@modelo.dado.to_s + ". Casilla actual " + @@modelo.jugador_actual.casillaActual.to_s
+        resultado=@@modelo.dado.to_s + ". Casilla actual " + @@modelo.jugador_actual.casillaActual.to_s
       when OpcionMenu.index(:APLICARSORPRESA) #APLICAR SORPRESA
         @@modelo.aplicar_sorpresa
         resultado="La sorpresa es " + @@modelo.carta_actual.to_s
-      when OpcionMenu.index(:INTERNTARSALIRCARCELPAGANDOLIBERTAD) #INTENTAR SALIR CARCEL PAGANDO LIBERTAD
-        salido=@@metodo.intentar_salir_carcel(ModeloQytetet::MetodoSalirCarcel::PAGANDOLIBERTAD)
+      when OpcionMenu.index(:INTENTARSALIRCARCELPAGANDOLIBERTAD) #INTENTAR SALIR CARCEL PAGANDO LIBERTAD
+        salido=@@modelo.intentar_salir_carcel(ModeloQytetet::MetodoSalirCarcel::PAGANDOLIBERTAD)
         if salido
           resultado = "Te has caido con las prisas y no has conseguido escapar.Además de pobre eres topre"
         else
@@ -192,7 +193,7 @@ module ControladorQytetet
         resultado = "Has vendido la propiedad. Espero que te acordaras de coger al gato"
       when OpcionMenu.index(:PASARTURNO) #PASAR TURNO
         @@modelo.siguiente_jugador
-        resultado = "Cambio de jugador"
+        resultado = "Cambio de jugador, turno de "+ @@modelo.jugador_actual.nombre
       when OpcionMenu.index(:OBTENERRANKING) #OBTENER RANKING
         @@modelo.obtener_ranking
         resultado = "Imprimiendo el ranking de los jugadores"

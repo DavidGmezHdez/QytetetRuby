@@ -46,8 +46,7 @@ module VistaTextualQytetet
       
       if opcion
         for i in valores_correctos.each
-#          puts i.to_s + " - " + ControladorQytetet::OpcionMenu[i].to_s
-            puts i
+          puts "Opcion: " + i.to_s + " - " + ControladorQytetet::OpcionMenu[i].to_s
         end
       else
         for i in valores_correctos.each
@@ -96,8 +95,7 @@ module VistaTextualQytetet
         if necesita_elegir_casilla
           casilla_elegida=ui.elegir_casilla(operacion_elegida)
         end
-        puts casilla_elegida
-        puts operacion_elegida
+        
         if !necesita_elegir_casilla || casilla_elegida>=0
           puts @@controlador.realizar_operacion(operacion_elegida, casilla_elegida)
         end
