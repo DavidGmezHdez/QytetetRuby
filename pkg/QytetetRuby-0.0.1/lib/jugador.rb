@@ -6,13 +6,13 @@ class Jugador
    attr_accessor :encarcelado, :cartaLibertad, :casillaActual, :propiedades
   
   
-  def initialize(nombre)
-      @encarcelado = false
+  def initialize(nombre,encarcelado=false,saldo=7500,carta_libertad=nil,casilla_actual=nil,propiedades=Array.new)
+      @encarcelado = encarcelado
       @nombre = nombre
-      @saldo = 7500
-      @cartaLibertad = nil
-      @casillaActual=0
-      @propiedades = Array.new
+      @saldo = saldo
+      @cartaLibertad = carta_libertad
+      @casillaActual= casilla_actual
+      @propiedades = propiedades
   end
 
 #  def self.nuevo (nombre)
@@ -21,7 +21,7 @@ class Jugador
 
   
   def self.copia(jugador)
-    self.new(jugador.nombre)
+    self.new(jugador.nombre,jugador.encarcelado,jugador.saldo,jugador.cartaLibertad,jugador.casillaActual,jugador.propiedades)
   end
   
   

@@ -31,22 +31,23 @@ module VistaTextualQytetet
       else
         puts "Casillas validas: "
         for i in casillas.each
-          puts i.to_s
-          auxiliar << i
+          puts i
+          auxiliar << i.to_s
         end
         return leer_valor_correcto(auxiliar,false).to_i
       end
-      
-      
     end
+    
+    
     def leer_valor_correcto(valores_correctos,opcion)
       pertenece=false
+      valor_correcto=""
       
       puts "Introduce una de las siguientes opciones: "
       
       if opcion
         for i in valores_correctos.each
-          puts "Opcion: " + i.to_s + " - " + ControladorQytetet::OpcionMenu[i].to_s
+          puts "Opcion: " + i.to_s + " - " + ControladorQytetet::OpcionMenu[i.to_i].to_s
         end
       else
         for i in valores_correctos.each
@@ -54,24 +55,48 @@ module VistaTextualQytetet
         end
       end
       
-      introducido=gets.chomp.to_i
-      
-      for i in valores_correctos.each
-        if introducido.to_i == i.to_i
-          pertenece = true
-          valor_correcto = introducido
-          break
+      loop do
+        valor = gets.chomp.to_i
+        for i in valores_correctos.each
+          if valor.to_i == i.to_i
+            pertenece=true
+            valor_correcto=valor
+          end
         end
+        break if pertenece
       end
-    
-      
-      if !pertenece
-        valor_correcto="El valor introducido no coincide con el de las opciones"
-     end
+     
       
       return valor_correcto
      
-    end
+end
+    
+#    
+#    
+#    def leer_valor_correcto(valores_correctos)
+#      pertenece=false
+#      valor_correcto=""
+#      
+#      puts "Introduce una de las siguientes opciones: "
+#      
+#      for i in valores_correctos.each
+#        puts "Opcion: " + i + " - " + ControladorQytetet::OpcionMenu[i.to_i].to_s
+#      end
+#      
+#      loop do
+#        valor = gets.chomp.to_i
+#        for i in valores_correctos.each
+#          if valor.to_i == i.to_i
+#            pertenece=true
+#            valor_correcto=valor
+#          end
+#        end
+#        break if pertenece
+#      end
+#     
+#      return valor_correcto
+#     
+#    end
     def elegir_operacion()
       lista=@@controlador.obtener_operaciones_juego_validas
       convertidos = Array.new
@@ -80,7 +105,7 @@ module VistaTextualQytetet
         convertidos << i.to_s
       end
       
-      return leer_valor_correcto(lista,true).to_i
+      return leer_valor_correcto(convertidos,true).to_i
     end
     
     def self.main

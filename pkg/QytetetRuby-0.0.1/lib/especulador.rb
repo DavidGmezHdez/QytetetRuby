@@ -42,26 +42,27 @@ module ModeloQytetet
     
     
     def puedo_edificar_casa(titulo)
-      hay_espacio = titulo.numCasas < 8
       tengo_saldo = false
       
-      if hay_espacio
-        coste_edificar = titulo.precioEdificar
-        tengo_saldo = super.tengo_saldo(coste_edificar)
+      if tengo_saldo(titulo.precioE)
+        tengo_saldo=true
       end
-      
-      return hay_espacio && tengo_saldo
+
+      return titulo.numCasas < 8 && tengo_saldo && !titulo.hipotecada
     end
     
     def puedo_edificar_hotel(titulo)
-      num_hoteles = titulo.numHoteles
-      tengo_saldo = super.tengo_saldo(titulo.precioEdificar)
+      tengo_saldo=false
       
-      return num_hoteles < 8 && tengo_saldo
+      if tengo_saldo(titulo.precioE)
+        tengo_saldo=true
+      end
+ 
+      return titulo.numHoteles < 8 && tengo_saldo && !titulo.hipotecada
     end
     
     def to_s
-      return super + " \nFianza: #{@fianza}"
+      return super + "\n Especulador, fianza: #{@fianza}"
     end
     
     private:pagar_fianza

@@ -12,9 +12,6 @@ require_relative "calle"
 require_relative "metodo_salir_carcel"
 require_relative "especulador"
 
-
-
-
 module ModeloQytetet
   class Qytetet
     include Singleton
@@ -52,8 +49,8 @@ module ModeloQytetet
       @mazo << Sorpresa.new("Parece que te está gustando el juego, por eso tendrás que recompensar a tus rivales.", -300, TipoSorpresa::PORJUGADOR)
       @mazo << Sorpresa.new("Vamos a jugar a algo, tú me das algo de dinero y yo no te doy nada. ¿Qué te parece?", -250, TipoSorpresa::PAGARCOBRAR)
       @mazo << Sorpresa.new("Vaya, esta sorpresa parece que te va a quitar algo de dinero por los hoteles y casas de tus rivales, siempre y cuando tú estés de acuerdo... o no.", -150, TipoSorpresa::PORCASAHOTEL)
-      @mazo=@mazo.shuffle
-    end
+      #@mazo=@mazo.shuffle
+      end
     protected
     def actuar_si_en_casilla_edificable
      debo_pagar = @jugador_actual.debo_pagar_alquiler
