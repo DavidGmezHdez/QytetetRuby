@@ -14,11 +14,6 @@ class Jugador
       @casillaActual= casilla_actual
       @propiedades = propiedades
   end
-
-#  def self.nuevo (nombre)
-#    new(nombre)
-#  end
-
   
   def self.copia(jugador)
     self.new(jugador.nombre,jugador.encarcelado,jugador.saldo,jugador.cartaLibertad,jugador.casillaActual,jugador.propiedades)
@@ -242,7 +237,7 @@ public
   end
   
   def debo_ir_a_carcel
-    return tengo_carta_libertad
+    return !tengo_carta_libertad
   end
   
   def convertime(fianza)
@@ -251,16 +246,13 @@ public
   end
   
   def puedo_edificar_casa(titulo)
-    hay_espacio=titulo.numCasas<4
     tengo_saldo=tengo_saldo(titulo.precioE)
-    return tengo_saldo && hay_espacio
+    return tengo_saldo && titulo.numCasas < 4
   end
   
   def puedo_edificar_hotel(titulo)
-    hay_casas=titulo.numCasas >=4
-    hay_hoteles=titulo.numHoteles < 4
     tengo_saldo=tengo_saldo(titulo.precioE)
-    return tengo_saldo && hay_casas && hay_hoteles
+    return tengo_saldo && titulo.numCasas >=4 && titulo.numHoteles < 4
   end
   
   private :es_de_mi_propiedad, :eliminar_de_mis_propiedades
